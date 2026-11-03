@@ -29,6 +29,16 @@ SVC = dict(B.SVC)
 SVC["c_ops"] = CONSULT + "service-details/" + B.quote("استشارات-تحسين-الأداء-والتشغيل")
 SVC["c_quote"] = CONSULT + "quote"
 SVC["t_quote"] = TRANSL + "quote"
+# WhatsApp numbers as published on each commercial site (verified Nov 2026)
+WA = {"A": "966507975011", "B": "966543784171"}
+TEL = {"A": "+966507975011", "B": "+966543784171"}
+
+
+def wa_link(pillar, title=None):
+    from urllib.parse import quote as q
+    dept = "قسم الدراسات والاستشارات" if pillar == "A" else "قسم الترجمة المعتمدة"
+    msg = f"السلام عليكم، أتواصل مع {dept} في جوجان" + (f" بخصوص ما قرأته في موسوعة جوجان: {title}" if title else " عن طريق موسوعة جوجان")
+    return f"https://wa.me/{WA[pillar]}?text={q(msg)}"
 
 # topic: (slug, title, pillar, service, service label, short blurb)
 TOPICS = {
@@ -72,6 +82,7 @@ def icon(name, cls="ic"):
         "globe": '<circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 10h15M10 2.5c2.3 2.2 3.3 4.7 3.3 7.5s-1 5.3-3.3 7.5c-2.3-2.2-3.3-4.7-3.3-7.5s1-5.3 3.3-7.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>',
         "book": '<path d="M3 4.5c2.5-1 5-1 7 .7v11.3c-2-1.7-4.5-1.7-7-.7zM17 4.5c-2.5-1-5-1-7 .7v11.3c2-1.7 4.5-1.7 7-.7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
         "mail": '<rect x="2.8" y="4.5" width="14.4" height="11" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 5.5l6.5 5 6.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
+        "chat": '<path d="M10 2.6a7.4 7.4 0 0 0-6.4 11.1L2.7 17.4l3.8-1a7.4 7.4 0 1 0 3.5-13.8z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.3 7.4c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.6 1.4c.1.2 0 .4-.1.6l-.4.5c-.1.1-.1.3 0 .5.5.9 1.2 1.6 2.1 2.1.2.1.4.1.5 0l.5-.5c.2-.2.4-.2.6-.1l1.4.6c.3.1.4.3.4.5v.5c0 .3-.1.6-.5.8-.6.3-1.4.4-2.4 0-1.8-.7-3.3-2.2-4-4-.4-1-.3-1.8 0-2.4z" fill="currentColor"/>',
         "star": '<path d="M10 2.5l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L2.8 7.8l5-.7z" fill="currentColor"/>',
     }
     return f'<svg class="{cls}" viewBox="0 0 20 20" aria-hidden="true" focusable="false">{P[name]}</svg>'
@@ -80,6 +91,21 @@ def icon(name, cls="ic"):
 def esc(x):
     return html.escape(x or "", quote=True)
 
+
+HUB_INTRO = {
+    "feasibility": "دراسة الجدوى هي الأداة التي تحدد إن كان المشروع يستحق رأس المال قبل إنفاقه. تجمع هذه الأدلة منهجيات الإعداد خطوة بخطوة، والفرق بين الدراسة التسويقية والفنية والمالية، وكيف تُقرأ مؤشرات مثل صافي القيمة الحالية ومعدل العائد الداخلي وفترة الاسترداد، إضافة إلى دراسات مبدئية لمشاريع في قطاعات مختلفة في السعودية. ابدأ بالأدلة الأشمل في أعلى القائمة إن كنت تتعرف على الموضوع لأول مرة.",
+    "industry": "المشاريع الصناعية في السعودية تحتاج دراسة جدوى أدق من غيرها: خطوط إنتاج ومواد خام وتراخيص صناعية ومتطلبات تمويل من جهات مثل صندوق التنمية الصناعية السعودي. تجمع هذه الأدلة قراءات أولية لفرص صناعية محددة، وتشرح ما الذي تسأله قبل تثبيت السعة الإنتاجية والاستثمار في المعدات.",
+    "market-research": "بحوث السوق هي الأساس الذي تُبنى عليه بقية دراسة الجدوى: من يشتري، وبكم، ومن ينافسك. تشرح هذه الأدلة طرق تقدير حجم السوق، وتحليل المنافسين، واختيار العينات، والتحليل الإحصائي، وكيف تتحول النتائج إلى افتراضات مالية قابلة للدفاع عنها.",
+    "financial-analysis": "التحليل المالي يحوّل خطة المشروع إلى أرقام يمكن الحكم عليها. تجمع هذه المداخل مفاهيم تحليل التكلفة والعائد والموازنات التقديرية وغيرها من أدوات التخطيط والرقابة المالية التي يحتاجها صاحب المشروع والمستثمر عند تقييم أي فرصة.",
+    "saudi-investment": "تتغير فرص الاستثمار في السعودية بسرعة مع برامج رؤية 2030 والقطاعات الجديدة. تجمع هذه الأدلة قراءات للقطاعات الواعدة والفرص في الرياض وبقية المناطق، مع التنبيه دائماً إلى أن الأرقام الرسمية هي المرجع، وأن كل فرصة تحتاج اختباراً خاصاً بها قبل الاستثمار.",
+    "management": "كثير من المشاريع لا تتعثر بسبب الفكرة بل بسبب الإدارة. تجمع هذه المداخل مفاهيم الإشراف الإداري والقيادة والثقافة التنظيمية وإدارة التغيير والتخطيط الاستراتيجي، إلى جانب أدلة حديثة في تشخيص الخلل الإداري وإعادة الهيكلة واستخدام الذكاء الاصطناعي في القرار.",
+    "sectors": "دراسات مبدئية لمشاريع في قطاعات محددة: إعادة التدوير، والطاقة المتجددة، والتقنية، والزراعة، والسياحة البيئية، والخدمات الرقمية. كل دراسة هنا قراءة أولية تساعدك على فهم الفرصة وأسئلتها الرئيسية، ولا تغني عن دراسة جدوى مخصصة بأرقام محدثة لمشروعك.",
+    "certified-translation": "الترجمة المعتمدة مطلوبة عندما تقدم وثيقة أجنبية إلى جهة رسمية: سفارة، أو جامعة، أو محكمة، أو وزارة. تشرح هذه الأدلة معنى الترجمة المعتمدة ومتى تحتاجها، وكيف تختار مكتب ترجمة في الرياض، وما الذي يؤثر في السعر ومدة التسليم، وكيف تطلب الخدمة أونلاين.",
+    "legal-translation": "الترجمة القانونية لا تحتمل الخطأ: كلمة واحدة قد تغير معنى بند في عقد أو وكالة. تشرح هذه الأدلة متطلبات ترجمة الوثائق المقدمة إلى وزارة العدل والمحاكم، وترجمة مستندات العلامات التجارية، وأهم ما تراجعه قبل تقديم الترجمة.",
+    "medical-translation": "الترجمة الطبية تحتاج دقة في المصطلح والجرعات والتشخيص، لأن أي خطأ قد يؤثر في العلاج أو في قبول الملف لدى المستشفى أو شركة التأمين أو السفارة. يشرح هذا القسم الوثائق الطبية الشائعة ومتطلبات ترجمتها ترجمة معتمدة.",
+    "travel-documents": "لكل سفارة متطلباتها في لغة الوثائق وصيغة الترجمة. يجمع هذا القسم متطلبات ترجمة وثائق التأشيرات والسفارات في الرياض حسب ما تنشره المصادر الرسمية، مع تذكير دائم بمراجعة صفحة السفارة قبل التقديم لأن المتطلبات تتغير.",
+    "languages": "أدلة للترجمة المعتمدة بين العربية ولغات محددة، مثل الفرنسية والإندونيسية والأمهرية: الوثائق الشائعة لكل لغة، وما يحتاج انتباهاً خاصاً في الأسماء والتواريخ والمصطلحات.",
+}
 
 # ---------------------------------------------------------------- photos
 PHOTOS = json.load(open(HERE / "photos.json"))
@@ -284,8 +310,9 @@ def clean_title(t, body):
     return t[0:1].upper() + t[1:] if t else "مقال من موسوعة جوجان"
 
 
-def seo_title(t):
-    base = t if len(t) <= 58 else t[:56].rsplit(" ", 1)[0] + "…"
+def seo_title(t, override=None):
+    t = override or t
+    base = t if len(t) <= 60 else t[:58].rsplit(" ", 1)[0] + "…"
     return f"{base} | {SHORT}"
 
 
@@ -306,7 +333,7 @@ def insert_mid_cta(body, cta_html):
 
 
 # ---------------------------------------------------------------- layout
-def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", cls="", noindex=False):
+def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", cls="", noindex=False, keywords=None, wa=None):
     url = SITE + path
     lds = "".join(f'<script type="application/ld+json">{json.dumps(o, ensure_ascii=False)}</script>\n' for o in (ld or []))
     ogi = f'<meta property="og:image" content="{esc(og_image)}">\n<meta name="twitter:card" content="summary_large_image">\n' if og_image else ""
@@ -317,6 +344,7 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
+{f'<meta name="keywords" content="{esc(keywords)}">' if keywords else ''}
 <link rel="canonical" href="{url}">
 <meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <meta property="og:type" content="{og_type}">
@@ -377,6 +405,7 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
  </div>
  <div class="wrap copy"><span>© {NOW.year} شركة جوجان لخدمات الأعمال، الرياض</span><span>الصور التوضيحية من Unsplash</span></div>
 </footer>
+{f'<a class="wa-float" href="{wa[0]}" target="_blank" rel="noopener" aria-label="{wa[1]}">{icon("chat")}<span>{wa[1]}</span></a>' if wa else ''}
 <script src="/assets/site.js?v={V}" defer></script>
 </body></html>"""
 
@@ -417,7 +446,7 @@ def tile(p):
     return f"""<article class="tile"><a href="{p['path']}"><span class="tile-img">{pimg(p['photo'], '', 600, 380, sizes='(max-width:700px) 100vw, 33vw')}</span><span class="topic">{t[0]}</span><h3>{esc(p['title'])}</h3><span class="tile-meta">{icon('clock')}{p['mins']} دقيقة قراءة</span></a></article>"""
 
 
-def cta(svc, variant="box"):
+def cta(svc, variant="box", title=None):
     url = SVC[svc]
     if svc.startswith("c_"):
         h, tx, b = "تحتاج دراسة جدوى لمشروعك؟", "قسم الدراسات في جوجان يعدّ دراسات الجدوى وبحوث السوق والملفات التمويلية للمشاريع في السعودية.", "تواصل مع قسم الدراسات"
@@ -425,7 +454,9 @@ def cta(svc, variant="box"):
     else:
         h, tx, b = "تحتاج ترجمة معتمدة لمستنداتك؟", "قسم الترجمة في جوجان يترجم العقود والوثائق الرسمية والتقارير الطبية ترجمة معتمدة.", "تواصل مع قسم الترجمة"
         cls = "pb"
-    return f'<aside class="cta {cls} {variant}"><p class="cta-title">{h}</p><p>{tx}</p><a class="btn" href="{url}">{b}</a></aside>'
+    pill = "A" if svc.startswith("c_") else "B"
+    return (f'<aside class="cta {cls} {variant}"><p class="cta-title">{h}</p><p>{tx}</p><div class="cta-btns">'
+            f'<a class="btn" href="{url}">{b}</a><a class="btn wa" href="{wa_link(pill, title)}" target="_blank" rel="noopener">{icon("chat")}واتساب</a></div></aside>')
 
 
 def banner(h1, sub, crumbs="", extra="", pc="pa"):
@@ -639,13 +670,18 @@ def build(feed, dist):
         CONTENT.mkdir(exist_ok=True)
         json.dump({"keep": [{k: p[k] for k in SNAP_KEYS} for p in keep], "redirects": redirects, "extra": extra},
                   open(snap_file, "w"), ensure_ascii=False)
+    for _ in range(5):
+        redirects = {k: redirects.get(v, v) for k, v in redirects.items()}
     new_posts = load_new_posts(redirects)
     keep = sorted(keep + new_posts, key=lambda x: x["published"], reverse=True)
     print("new posts published:", len(new_posts))
 
 
     org = {"@type": "Organization", "@id": SITE + "/#org", "name": "شركة جوجان لخدمات الأعمال", "alternateName": "Googan Business Services Company",
-           "url": CONSULT, "logo": LOGO, "email": "info@googan.net", "sameAs": [CONSULT, TRANSL]}
+           "url": CONSULT, "logo": LOGO, "email": "info@googan.net", "sameAs": [CONSULT, TRANSL],
+           "address": {"@type": "PostalAddress", "addressLocality": "الرياض", "addressCountry": "SA"},
+           "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "telephone": TEL["A"], "areaServed": "SA", "availableLanguage": ["ar", "en"], "name": "قسم الدراسات والاستشارات"},
+                            {"@type": "ContactPoint", "contactType": "customer service", "telephone": TEL["B"], "areaServed": "SA", "availableLanguage": ["ar", "en"], "name": "قسم الترجمة المعتمدة"}]}
     by_topic = {k: sorted([p for p in keep if p["topic"] == k], key=lambda x: -x["words"]) for k in TOPICS}
     live_topics = [k for k in TOPICS if by_topic[k]]
     topic_photo = {k: by_topic[k][0]["photo"] for k in live_topics}
@@ -666,6 +702,9 @@ def build(feed, dist):
             lis = "".join(f'<li><a href="#{i}">{esc(x)}</a></li>' for i, x in p["toc_items"])
             toc = f'<details class="toc" open><summary>في هذا الدليل {icon("down")}</summary><ol>{lis}</ol></details>'
         lead = f'<div class="keybox"><h2>الخلاصة</h2><p>{esc(p["lead"])}</p></div>' if p["lead"] else ""
+        svc_line = (f'<p class="svc-line">{icon("doc")}<span>تحتاج تطبيق ما في هذا الدليل على حالتك؟ اطلع على خدمة <a href="{SVC[t[2]]}">{t[3]}</a> '
+                    f'لدى {"قسم الدراسات والاستشارات" if t[1] == "A" else "قسم الترجمة المعتمدة"} في جوجان، أو <a href="{wa_link(t[1], p["title"])}" target="_blank" rel="noopener">راسلنا عبر واتساب</a>.</span></p>')
+        art_body = re.sub(r'<aside class="cta [^"]*inline">.*?</aside>', lambda m: cta(t[2], "inline", p["title"]), p["body"], count=1, flags=re.S)
         body = f"""<div class="art-head {pc}"><div class="wrap art-head-grid">
 <div class="art-head-copy">{crumbs(cr)}<a class="pill" href="/topics/{p['topic']}/">{t[0]}</a><h1>{esc(p['title'])}</h1>
 <p class="meta"><span>{icon('cal')}نُشر <time datetime="{iso_pub}">{d_pub}</time></span>{upd}<span>{icon('clock')}{p['mins']} دقيقة قراءة</span></p>
@@ -674,13 +713,13 @@ def build(feed, dist):
 </div></div>
 <div class="wrap art-grid">
 <article class="art-main">
-{lead}{toc}
-<div class="prose">{p['body']}</div>
+{lead}{svc_line}{toc}
+<div class="prose">{art_body}</div>
 <p class="disclaimer">{icon('book')}المحتوى تعليمي عام ولا يغني عن استشارة مهنية لحالتك أو عن الرجوع إلى الجهة الرسمية المختصة.</p>
-{cta(t[2])}
+{cta(t[2], "box", p["title"])}
 </article>
 <aside class="art-side"><div class="side-box"><h2>قراءات مهمة</h2><ul class="minis">{''.join(mini(q) for q in reads)}</ul></div>
-<div class="side-box svc-box {pc}"><h2>خدمة مرتبطة</h2><p>{t[3]}</p><a class="btn" href="{SVC[t[2]]}">اعرف التفاصيل</a></div></aside>
+<div class="side-box svc-box {pc}"><h2>خدمة مرتبطة</h2><p>{t[3]}</p><a class="btn" href="{SVC[t[2]]}">اعرف التفاصيل</a><a class="btn wa" href="{wa_link(t[1], p["title"])}" target="_blank" rel="noopener">{icon("chat")}واتساب</a></div></aside>
 </div>
 {f'<section class="wrap related"><h2>مواضيع ذات صلة</h2><div class="tiles">{"".join(tile(q) for q in related)}</div></section>' if related else ''}"""
         url = SITE + p["path"]
@@ -692,7 +731,10 @@ def build(feed, dist):
                {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + (u or p["path"])} for i, (n, u) in enumerate(cr)]}]}]
         out = dist / "_posts" / (re.sub(r"[^A-Za-z0-9_-]", "_", p["path"].strip("/")[:-5]) + ".html")
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(page(seo_title(p["title"]), p["desc"], p["path"], body, ld=ld, og_image=purl(p["photo"], 1200, 630), og_type="article", cls="is-article"), encoding="utf-8")
+        kw = "، ".join(dict.fromkeys([p.get("seo_title") or p["title"], t[0], "السعودية", "جوجان"]))
+        wa_label = "استفسر عبر واتساب"
+        out.write_text(page(seo_title(p["title"], p.get("seo_title")), p["desc"], p["path"], body, ld=ld, og_image=purl(p["photo"], 1200, 630), og_type="article", cls="is-article",
+                            keywords=kw, wa=(wa_link(t[1], p["title"]), wa_label)), encoding="utf-8")
 
     # ---------------- hubs
     for k in live_topics:
@@ -701,16 +743,19 @@ def build(feed, dist):
         lst = by_topic[k]
         other = [x for x in live_topics if x != k and TOPICS[x][1] == t[1]]
         intro = f"{t[4]} {count_label(len(lst))} {'مرتبة' if len(lst) > 2 else ''} حسب الشمول.".replace("  ", " ")
+        hub_text = HUB_INTRO.get(k, "")
         tags = "".join(f'<a href="/topics/{x}/">{TOPICS[x][0]}</a>' for x in other)
         ex = f'<div class="banner-tags"><a href="/topics/">كل المحاور</a>{tags}</div>'
         body = banner(t[0], intro, crumbs([("الموسوعة", "/"), ("المحاور", "/topics/"), (t[0], None)]), ex, pc) + f"""
+{f'<div class="wrap hub-intro prose"><p>{hub_text}</p></div>' if hub_text else ''}
 <div class="wrap list-grid"><section class="cards" aria-labelledby="list-h"><h2 class="sr" id="list-h">أدلة {t[0]} مرتبة حسب الشمول</h2>{''.join(card(p, i + 1, 'الدليل الأشمل' if i == 0 else None) for i, p in enumerate(lst))}</section>
-<aside class="list-side">{cta(t[2], 'box')}<div class="side-box"><h2>محاور قريبة</h2><ul class="links">{''.join(f'<li><a href="/topics/{x}/">{TOPICS[x][0]}<em>{len(by_topic[x])}</em></a></li>' for x in other)}</ul></div></aside></div>"""
+<aside class="list-side">{cta(t[2], 'box', t[0])}<div class="side-box"><h2>محاور قريبة</h2><ul class="links">{''.join(f'<li><a href="/topics/{x}/">{TOPICS[x][0]}<em>{len(by_topic[x])}</em></a></li>' for x in other)}</ul></div></aside></div>"""
         ld = [{"@context": "https://schema.org", "@graph": [org, {"@type": "CollectionPage", "name": t[0], "url": f"{SITE}/topics/{k}/", "inLanguage": "ar",
                "mainEntity": {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": SITE + p["path"], "name": p["title"]} for i, p in enumerate(lst)]}}]}]
         d = dist / "topics" / k
         d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(page(f"{t[0]}: أدلة ومراجع | {SHORT}", desc_of(intro, ""), f"/topics/{k}/", body, ld=ld, og_image=purl(topic_photo[k], 1200, 630)), encoding="utf-8")
+        (d / "index.html").write_text(page(f"{t[0]}: أدلة ومراجع | {SHORT}", desc_of(hub_text or intro, ""), f"/topics/{k}/", body, ld=ld, og_image=purl(topic_photo[k], 1200, 630),
+                                           keywords=f"{t[0]}، {t[3]}، السعودية، جوجان", wa=(wa_link(t[1], t[0]), "استفسر عبر واتساب")), encoding="utf-8")
 
     def topic_cards(pl):
         return "".join(f'<li><a href="/topics/{k}/"><span class="tc-img">{pimg(topic_photo[k], '', 480, 300)}</span><span class="tc-body"><b>{TOPICS[k][0]}</b><span>{TOPICS[k][4]}</span><em>{count_label(len(by_topic[k]))}</em></span></a></li>' for k in live_topics if TOPICS[k][1] == pl)
@@ -772,6 +817,8 @@ def build(feed, dist):
 <section class="doors"><div class="wrap doors-grid">
 <a class="door pa" href="{CONSULT}"><span class="door-ic">{icon('chart')}</span><b>جوجان للدراسات والاستشارات</b><span>دراسات الجدوى، بحوث السوق، ملفات التمويل الصناعي، إعادة الهيكلة.</span><em>googanconsult.com</em></a>
 <a class="door pb" href="{TRANSL}"><span class="door-ic">{icon('doc')}</span><b>جوجان للترجمة المعتمدة</b><span>ترجمة قانونية وطبية وأكاديمية ووثائق السفارات والتأشيرات.</span><em>googantranslation.com</em></a>
+<a class="door-wa" href="{wa_link('A')}" target="_blank" rel="noopener">{icon('chat')}واتساب قسم الدراسات</a>
+<a class="door-wa" href="{wa_link('B')}" target="_blank" rel="noopener">{icon('chat')}واتساب قسم الترجمة</a>
 </div></section>"""
     site_ld = [{"@context": "https://schema.org", "@graph": [org, {"@type": "WebSite", "@id": SITE + "/#site", "name": NAME, "alternateName": SHORT, "url": SITE + "/", "inLanguage": "ar", "publisher": {"@id": SITE + "/#org"}}]}]
     (dist / "index.html").write_text(page(f"{SHORT}: أدلة دراسات الجدوى والاستثمار والترجمة المعتمدة", f"{n_all} دليلاً عربياً في دراسات الجدوى والاستثمار في السعودية والترجمة المعتمدة، مرتبة حسب الشمول ومراجعة {REVIEWED}.", "/", home, ld=site_ld, og_image=purl(hero_photo, 1200, 630), cls="is-home"), encoding="utf-8")
@@ -779,6 +826,18 @@ def build(feed, dist):
     # ---------------- about / 404
     about = banner("عن الموسوعة ومنهجية التحرير", "من يحرر الموسوعة، وكيف نختار المحتوى ونراجعه ونصححه.", crumbs([("الموسوعة", "/"), ("عن الموسوعة", None)])) + f"""<div class="wrap narrow prose about">
 <h2 id="who">من نحن</h2><p>«{NAME}» مرجع تعليمي عربي تحرره شركة جوجان لخدمات الأعمال في الرياض. تخدم الموسوعة قسمين في الشركة: قسم الدراسات والاستشارات (<a href="{CONSULT}">googanconsult.com</a>) وقسم الترجمة المعتمدة (<a href="{TRANSL}">googantranslation.com</a>).</p>
+<h2 id="credentials">الشركة واعتماداتها</h2><ul>
+<li>الاسم النظامي: شركة جوجان لخدمات الأعمال (Googan Business Services Company)، الرياض، المملكة العربية السعودية.</li>
+<li>خبرة تمتد لأكثر من 30 عاماً في الأردن والسعودية.</li>
+<li>شهادة ISO 17100:2015 الخاصة بمقدمي خدمات الترجمة، رقم RSBV-2601-9791، صادرة عن Royal Stancert B.V.</li>
+<li>شهادة ISO 9001:2015 لنظام إدارة الجودة، رقم 241026019612، صادرة عن ARS Assessment.</li>
+<li>المركز الأول في برنامج «بصمة بلدي» التابع لوزارة البلديات والإسكان عام 2024.</li>
+</ul>
+<h2 id="contact">التواصل</h2><ul>
+<li>قسم الدراسات والاستشارات: <a href="{CONSULT}">googanconsult.com</a>، واتساب <a href="{wa_link('A')}" target="_blank" rel="noopener"><bdi dir="ltr">+966 50 797 5011</bdi></a></li>
+<li>قسم الترجمة المعتمدة: <a href="{TRANSL}">googantranslation.com</a>، واتساب <a href="{wa_link('B')}" target="_blank" rel="noopener"><bdi dir="ltr">+966 54 378 4171</bdi></a></li>
+<li>البريد الإلكتروني: <a href="mailto:info@googan.net">info@googan.net</a></li>
+</ul>
 <h2 id="method">منهجية التحرير</h2><ul><li>تنشر الموسوعة أدلة تعليمية تشرح المفاهيم والخطوات العامة، ولا تنشر وعوداً بنتائج أو تقييمات.</li><li>عند ذكر اشتراط نظامي أو رقم رسمي نحيل إلى مصدره، ونذكر تاريخ آخر مراجعة على كل صفحة.</li><li>رُتّبت الأدلة في القوائم حسب شمول المحتوى (حجمه وعدد أقسامه)، وليس حسب تقييمات.</li><li>دُمجت المقالات المكررة، وأُحيلت المقالات القصيرة أو الخارجة عن تخصص الموسوعة إلى أقرب صفحة مناسبة، مع الحفاظ على روابطها القديمة.</li></ul>
 <h2 id="images">الصور</h2><p>الصور الرئيسية في المقالات صور توضيحية من منصة Unsplash، ولا تمثل مشاريع أو عملاء لجوجان.</p>
 <h2 id="fix">التصحيح والتواصل</h2><p>لملاحظة أو تصحيح على أي مقال راسلنا على <a href="mailto:info@googan.net">info@googan.net</a> مع رابط المقال.</p>

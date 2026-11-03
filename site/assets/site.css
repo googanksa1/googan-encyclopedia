@@ -358,3 +358,23 @@ main{flex:1 0 auto}
   .menu>summary{display:block}
   .search{width:220px}
 }
+/* WhatsApp + service line */
+.cta-btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn.wa,.pb .btn.wa{background:#1d7f4b}
+.btn.wa:hover,.pb .btn.wa:hover{background:#166a3d}
+.btn .ic{width:18px;height:18px}
+.svc-box .btn{margin:0 0 8px;width:100%}
+.svc-line{display:flex;gap:10px;align-items:flex-start;background:var(--soft);border-radius:var(--r);padding:14px 16px;margin:0 0 22px;font-size:15px;line-height:1.8}
+.svc-line .ic{color:var(--ink);margin-top:5px}
+.svc-line a{font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.wa-float{position:fixed;inset-inline-start:auto;left:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:8px;background:#1d7f4b;color:#fff;font:700 14px var(--head);padding:11px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.2);text-decoration:none!important}
+.wa-float:hover{background:#166a3d}
+.wa-float .ic{width:22px;height:22px}
+.hub-intro{padding-top:30px;max-width:980px}
+.hub-intro p{margin:0;font-size:17px}
+@media (max-width:620px){.wa-float span{display:none}.wa-float{padding:13px}}
+@media print{.wa-float{display:none}}
+.door-wa{display:flex;align-items:center;justify-content:center;gap:8px;background:#1d7f4b;color:#fff;font:700 15px var(--head);padding:12px;border-radius:12px;text-decoration:none!important}
+.door-wa:hover{background:#166a3d}
+.door-wa .ic{width:20px;height:20px}
+.btn .ic,.wa-float .ic,.door-wa .ic,.btn.wa .ic{color:#fff!important}
