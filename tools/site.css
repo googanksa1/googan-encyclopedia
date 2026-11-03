@@ -378,3 +378,17 @@ main{flex:1 0 auto}
 .door-wa:hover{background:#166a3d}
 .door-wa .ic{width:20px;height:20px}
 .btn .ic,.wa-float .ic,.door-wa .ic,.btn.wa .ic{color:#fff!important}
+/* city guides: remote-service box */
+.online-box{margin:34px 0;background:var(--ink);color:#fff;border-radius:14px;padding:26px 26px 20px;border-inline-start:6px solid var(--gold)}
+.online-box .ob-kicker{margin:0 0 4px;color:var(--gold);font:700 14px var(--head)}
+.online-box .ob-title{margin:0 0 14px;font:800 23px/1.45 var(--head);color:#fff}
+.online-box ul{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:9px}
+.online-box li{display:flex;gap:10px;align-items:flex-start;font-size:16px;line-height:1.7;color:#e8e8f6}
+.online-box li .ic{flex:none;margin-top:5px;color:var(--gold)}
+.online-box .cta-btns{display:flex;flex-wrap:wrap;gap:10px}
+.online-box .btn.wa{font-size:16px;padding:13px 24px}
+.online-box .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+.online-box .btn.ghost:hover{background:rgba(255,255,255,.08)}
+.online-box .ob-note{margin:14px 0 0;font-size:13px;color:#b9b9d6}
+@media (max-width:600px){.online-box{padding:20px 18px}.online-box .ob-title{font-size:20px}.online-box .btn{width:100%}}
+.prose td a[href*="google.com/maps"]{white-space:nowrap;word-break:keep-all;overflow-wrap:normal}

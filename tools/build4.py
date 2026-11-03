@@ -2,7 +2,7 @@
 """GOOGAN Encyclopedia v4 — rebuilt from scratch on the original URLs.
 Layout follows the owner's reference (ranked guide list + banner + must-reads + FAQ),
 brand colour #1c1b42. Usage: python3 build4.py <feed.atom> <dist>"""
-import collections, html, json, re, shutil, sys, warnings
+import collections, html, json, os, re, shutil, sys, warnings
 from datetime import datetime
 from pathlib import Path
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning, NavigableString
@@ -459,6 +459,19 @@ def cta(svc, variant="box", title=None):
             f'<a class="btn" href="{url}">{b}</a><a class="btn wa" href="{wa_link(pill, title)}" target="_blank" rel="noopener">{icon("chat")}واتساب</a></div></aside>')
 
 
+def online_box(city, title=None):
+    """Remote-service box for city guides: Googan is an online option, not a local branch."""
+    return (f'<aside class="online-box" aria-label="خدمة الترجمة أونلاين من جوجان">'
+            f'<p class="ob-kicker">لسكان {city}: خدمة عن بُعد من الرياض</p>'
+            f'<p class="ob-title">ترجمة معتمدة أونلاين، واستلم ترجمتك بصيغة PDF</p>'
+            f'<ul><li>{icon("chat")}ترسل صورة واضحة أو ملف PDF للمستند عبر واتساب</li>'
+            f'<li>{icon("doc")}نراجع المستند ونرسل لك السعر والمدة قبل البدء</li>'
+            f'<li>{icon("check")}تستلم الترجمة المعتمدة ملف PDF، ونتفق معك على النسخة الورقية إن احتجتها</li></ul>'
+            f'<div class="cta-btns"><a class="btn wa" href="{wa_link("B", title)}" target="_blank" rel="noopener">{icon("chat")}تواصل معنا الآن عبر واتساب</a>'
+            f'<a class="btn ghost" href="{SVC["t_certified"]}">صفحة الترجمة المعتمدة</a></div>'
+            f'<p class="ob-note">جوجان لا تملك فرعاً في {city}؛ الخدمة تُقدَّم عن بُعد من مكتبنا في الرياض.</p></aside>')
+
+
 def banner(h1, sub, crumbs="", extra="", pc="pa"):
     return f"""<section class="banner {pc}"><div class="wrap">{crumbs}<h1>{h1}</h1>{f'<p class="sub">{sub}</p>' if sub else ''}{extra}<p class="reviewed">{icon('check','ic tick')}آخر مراجعة للمحتوى: {REVIEWED}</p></div></section>"""
 
@@ -626,7 +639,7 @@ def load_new_posts(redirects):
             if ":" in line:
                 k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
         when = datetime.strptime(meta["date"], "%Y-%m-%d %H:%M").replace(tzinfo=RIYADH)
-        if when > now:
+        if when > now and not os.environ.get("PREVIEW_ALL"):
             continue
         topic = meta.get("topic", "feasibility")
         if topic not in TOPICS:
@@ -635,6 +648,8 @@ def load_new_posts(redirects):
         path = f"/{when:%Y}/{when:%m}/{slug}.html"
         html_body = markdown.markdown(m.group(2), extensions=["tables", "sane_lists"])
         html_body = scrub(html_body, TOPICS[topic][2])
+        if meta.get("city"):
+            html_body = re.sub(r"<p>\s*\[\[online-box\]\]\s*</p>", lambda _m: online_box(meta["city"], meta["title"]), html_body)
         lead, html_body = G.lead_and_rest(html_body)
         html_body, _ = B.toc_and_ids(html_body)
         sp = BeautifulSoup(html_body, "lxml")
@@ -642,7 +657,7 @@ def load_new_posts(redirects):
         iso = when.isoformat()
         p = {"path": path, "type": "POST", "title": meta["title"], "topic": topic, "published": iso,
              "updated": meta.get("updated", iso), "lead": lead, "toc_items": toc_items,
-             "body": insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")),
+             "body": html_body if meta.get("city") else insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")),
              "desc": meta.get("description") or desc_of(lead, html_body)}
         p["mins"], p["words"] = G.reading_minutes(lead + html_body)
         p["photo"] = meta.get("photo") or take_photo(topic)
