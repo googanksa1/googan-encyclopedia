@@ -867,6 +867,9 @@ def build(feed, dist):
     nf = banner("الصفحة غير موجودة", "ربما نُقلت الصفحة أو حُذفت. ابحث عن الدليل الذي تريده أو ابدأ من فهرس المحاور.") + f"""<div class="wrap narrow nf"><form class="search big" action="https://www.google.com/search" method="get" role="search" data-search><input type="hidden" name="as_sitesearch" value="bloggoogan.com"><label class="sr" for="q-nf">ابحث في الموسوعة</label><input id="q-nf" type="search" name="q" placeholder="ابحث عن دليل…" autocomplete="off" data-q><button type="submit" aria-label="ابحث">{icon('search')}<span>ابحث</span></button><div class="results" role="listbox" hidden></div></form><p><a class="btn" href="/topics/">فهرس المحاور</a> <a class="btn ghost" href="/">الصفحة الرئيسية</a></p></div>"""
     (dist / "404.html").write_text(page(f"الصفحة غير موجودة | {SHORT}", "الصفحة غير موجودة.", "/404", nf, noindex=True), encoding="utf-8")
 
+    import books
+    books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT)
+
     # ---------------- search index, sitemap, robots, feed, headers, redirects
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
     json.dump([{"t": p["title"], "u": p["path"], "c": norm_topic[p["topic"]]} for p in keep], open(dist / "assets" / "search.json", "w"), ensure_ascii=False)

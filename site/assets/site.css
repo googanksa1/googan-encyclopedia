@@ -403,3 +403,29 @@ main{flex:1 0 auto}
 .vc-step .vc-c{font:700 14px var(--head);color:var(--teal-d)}
 .vc-step:not(:last-child)::after{content:"←";position:absolute;inset-inline-end:-13px;top:50%;transform:translateY(-50%);color:var(--muted);font:700 18px var(--head)}
 @media (max-width:760px){.vchain{grid-template-columns:1fr;gap:22px}.vc-step:not(:last-child)::after{content:"↓";inset-inline-end:auto;inset-inline-start:50%;top:auto;bottom:-22px;transform:none}}
+/* books (read-only) */
+.bk-text{font-size:18.5px;line-height:2.05}
+.bk-text p{margin-bottom:1em}
+.bk-text h2{margin-top:1.6em}
+.bk-key{border-right:4px solid var(--teal);background:var(--soft);padding:14px 20px;margin:1.4em 0;border-radius:0 var(--r) var(--r) 0}
+.bk-key p{margin:0;font-weight:700;font-size:18px}
+.bk-sub{display:block;font-size:.62em;font-weight:600;margin-top:8px;opacity:.85}
+.bk-book{margin:0 0 6px;font-weight:700}.bk-book a{color:inherit}
+.bk-credit{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:#555;border-top:1px solid var(--line);padding-top:14px;margin-top:28px}
+.bk-credit .ic{flex:none;margin-top:3px}
+.bk-pager{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.bk-pager a{display:block;border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;color:var(--ink);font-weight:700;line-height:1.6}
+.bk-pager a:hover{border-color:var(--ink)}
+.bk-pager small{display:block;font-weight:500;color:#666;font-size:13px}
+.bk-next{grid-column:2;text-align:left}
+.bk-side ol{margin:0;padding:0 18px 0 0;font-size:14.5px;line-height:1.7}
+.bk-side li{margin-bottom:6px}.bk-side li[aria-current] a{font-weight:800;color:var(--ink);text-decoration:underline}
+.bk-side{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto}
+.bk-info{display:grid;gap:0;border:1px solid var(--line);border-radius:var(--r);margin:28px 0 10px}
+.bk-info>div{display:grid;grid-template-columns:9em 1fr;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line)}
+.bk-info>div:last-child{border-bottom:0}.bk-info dt{font-weight:800}.bk-info dd{margin:0}
+.bk-toc{font-size:17px;line-height:1.9;padding-right:22px}
+.bk-cards{list-style:none;padding:0;margin:28px 0}
+.bk-card a{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;color:var(--ink)}
+.bk-card strong{font-size:19px}
+@media (max-width:900px){.bk-grid .art-side{order:2}.bk-side{position:static;max-height:none}.bk-text{font-size:17.5px}.bk-info>div{grid-template-columns:1fr;gap:2px}}
