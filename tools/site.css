@@ -393,3 +393,13 @@ main{flex:1 0 auto}
 @media (max-width:600px){.online-box{padding:20px 18px}.online-box .ob-title{font-size:20px}.online-box .btn{width:100%}}
 .prose td a[href*="google.com/maps"]{white-space:nowrap;word-break:keep-all;overflow-wrap:normal}
 .prose td,.prose th{word-break:normal;overflow-wrap:normal}.prose td:first-child,.prose th:first-child{min-width:5.5em}
+/* value-chain diagram */
+.vchain{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0;counter-reset:vc}
+.vc-step{position:relative;background:var(--soft);border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:12px;padding:18px 16px 14px}
+.vc-step:nth-child(2){border-top-color:var(--blue)}.vc-step:nth-child(3){border-top-color:var(--gold)}
+.vc-step::before{counter-increment:vc;content:counter(vc);position:absolute;top:-16px;inset-inline-start:14px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font:700 15px/28px var(--head);text-align:center}
+.vc-step p{margin:0 0 6px;font-size:15px;line-height:1.7}
+.vc-step .vc-n{font:800 17px/1.5 var(--head);color:var(--ink)}
+.vc-step .vc-c{font:700 14px var(--head);color:var(--teal-d)}
+.vc-step:not(:last-child)::after{content:"←";position:absolute;inset-inline-end:-13px;top:50%;transform:translateY(-50%);color:var(--muted);font:700 18px var(--head)}
+@media (max-width:760px){.vchain{grid-template-columns:1fr;gap:22px}.vc-step:not(:last-child)::after{content:"↓";inset-inline-end:auto;inset-inline-start:50%;top:auto;bottom:-22px;transform:none}}
