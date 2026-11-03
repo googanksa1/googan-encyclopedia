@@ -851,8 +851,7 @@ def build(feed, dist):
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
     json.dump([{"t": p["title"], "u": p["path"], "c": norm_topic[p["topic"]]} for p in keep], open(dist / "assets" / "search.json", "w"), ensure_ascii=False)
     urls = [("/", None), ("/topics/", None), ("/about/", None)] + [(f"/topics/{k}/", None) for k in live_topics]
-    shutil.copy(HERE / "sitemap.xsl", dist / "sitemap.xsl")
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u, _ in urls]
     sm += [f"<url><loc>{SITE}{p['path']}</loc><lastmod>{p['updated'][:10]}</lastmod></url>" for p in keep]
     (dist / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
