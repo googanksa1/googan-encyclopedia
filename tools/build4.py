@@ -868,7 +868,7 @@ def build(feed, dist):
     (dist / "404.html").write_text(page(f"الصفحة غير موجودة | {SHORT}", "الصفحة غير موجودة.", "/404", nf, noindex=True), encoding="utf-8")
 
     import books
-    books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT)
+    book_urls = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT)
 
     # ---------------- search index, sitemap, robots, feed, headers, redirects
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
@@ -877,6 +877,7 @@ def build(feed, dist):
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u, _ in urls]
     sm += [f"<url><loc>{SITE}{p['path']}</loc><lastmod>{p['updated'][:10]}</lastmod></url>" for p in keep]
+    sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in book_urls]
     (dist / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
     (dist / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /_posts/\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])

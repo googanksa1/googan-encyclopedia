@@ -45,7 +45,7 @@ def label(s):
 
 def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short):
     root = Path(dist) / "books"
-    cards = []
+    cards, urls = [], ["/books/"]
     for bk in BOOKS:
         secs = json.load(open(HERE / "content" / "books" / bk["file"], encoding="utf-8"))
         base = f"/books/{bk['slug']}/"
@@ -58,7 +58,8 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short):
 <p><a class="btn" href="{base}01/">ابدأ القراءة</a></p>
 <h2>فهرس الكتاب</h2><ol class="bk-toc">{toc}</ol></div>"""
         (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
-        (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body, noindex=True), encoding="utf-8")
+        urls.append(base)
+        (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body), encoding="utf-8")
         for i, s in enumerate(secs):
             n = i + 1
             prev_a = f'<a class="bk-prev" href="{base}{n-1:02d}/"><small>السابق</small>{esc(label(secs[i-1]))}</a>' if i else f'<a class="bk-prev" href="{base}"><small>السابق</small>غلاف الكتاب وفهرسه</a>'
@@ -69,9 +70,11 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short):
 <div class="wrap art-grid bk-grid"><article class="art-main"><div class="prose bk-text">{render(s["blocks"], esc)}</div>
 {credit}<nav class="bk-pager" aria-label="التنقل بين الفصول">{prev_a}{next_a}</nav></article>
 <aside class="art-side"><nav class="side-box bk-side" aria-label="فهرس الكتاب"><h2>فهرس الكتاب</h2><ol>{side}</ol></nav></aside></div>"""
+            urls.append(f"{base}{n:02d}/")
             d = root / bk["slug"] / f"{n:02d}"
             d.mkdir(parents=True, exist_ok=True)
-            (d / "index.html").write_text(page(f"{label(s)} | {bk['title']}", f"{label(s)}، من كتاب {bk['title']}. قراءة مجانية على موسوعة جوجان.", f"{base}{n:02d}/", body, noindex=True), encoding="utf-8")
+            (d / "index.html").write_text(page(f"{label(s)} | {bk['title']}", f"{label(s)}، من كتاب {bk['title']}. قراءة مجانية على موسوعة جوجان.", f"{base}{n:02d}/", body), encoding="utf-8")
         cards.append(f'<li class="bk-card"><a href="{base}"><strong>{esc(bk["title"])}</strong><span>{esc(bk["authors_ar"])}</span><span>{len(secs)} قسماً</span></a></li>')
     body = banner("مكتبة الكتب", "كتب كاملة ترجمها قسم الترجمة في جوجان وتُقرأ مجاناً على الموقع.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + f'<div class="wrap narrow"><ul class="bk-cards">{"".join(cards)}</ul></div>'
-    (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً على موسوعة جوجان.", "/books/", body, noindex=True), encoding="utf-8")
+    (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً على موسوعة جوجان.", "/books/", body), encoding="utf-8")
+    return urls
