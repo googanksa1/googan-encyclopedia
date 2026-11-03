@@ -8,7 +8,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning, NavigableString
 from urllib.parse import unquote
 
-sys.path.insert(0, "/home/claude/encyclopedia/src")
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).parent))
 import build as B
 import gsite as G
 
@@ -22,7 +22,7 @@ LOGO = "https://googanconsult.com/storage/settings/site/Ulnh7JiOy6P65aUaaHTSjHZG
 MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
 NOW = datetime.now()
 REVIEWED = f"{MONTHS[NOW.month - 1]} {NOW.year}"
-V = NOW.strftime("%Y%m%d%H%M")
+V = __import__("hashlib").md5((HERE / "site.css").read_bytes() + (HERE / "site.js").read_bytes()).hexdigest()[:8]
 
 # verified on the live commercial sites (Nov 2026)
 SVC = dict(B.SVC)
@@ -451,18 +451,11 @@ def faq(items):
 
 
 # ---------------------------------------------------------------- build
-def build(feed, dist):
-    dist = Path(dist)
-    if dist.exists():
-        shutil.rmtree(dist)
-    (dist / "assets").mkdir(parents=True)
-    for f in ("site.css", "site.js", "mark.svg"):
-        shutil.copy(HERE / f, dist / "assets" / f)
+def prepare_legacy(feed):
     decisions = json.load(open(HERE / "decisions.json"))
     items = B.parse_feed(feed)
     keep = [p for p in items if decisions[p["path"]]["action"] == "keep"]
     redirects = {k: v["target"] for k, v in decisions.items() if v["action"] == "redirect"}
-
     # pass 1: content
     for p in keep:
         topic = OVERRIDE.get(p["path"]) or decisions[p["path"]]["topic"]
@@ -577,6 +570,79 @@ def build(feed, dist):
         p["body"] = insert_mid_cta(body, cta(TOPICS[p["topic"]][2], "inline"))
         p["desc"] = desc_of(p["lead"], body)
     print("links:", stats)
+    return keep, redirects, extra
+
+
+SNAP_KEYS = ("path", "type", "title", "topic", "published", "updated", "lead", "body", "toc_items", "desc", "mins", "words", "photo")
+CONTENT = HERE / "content"
+RIYADH = __import__("datetime").timezone(__import__("datetime").timedelta(hours=3))
+
+
+def load_new_posts(redirects):
+    """New articles: content/posts/*.md with a front-matter block between --- lines.
+    Fields: title, slug, topic, date (YYYY-MM-DD HH:MM, Riyadh time), description (optional), photo (optional).
+    A post is published only when its date has passed."""
+    import markdown
+    out = []
+    now = datetime.now(RIYADH)
+    for f in sorted((CONTENT / "posts").glob("*.md")) if (CONTENT / "posts").exists() else []:
+        raw = f.read_text(encoding="utf-8")
+        m = re.match(r"^---\s*\n(.*?)\n---\s*\n(.*)$", raw, re.S)
+        if not m:
+            print("skip (no front matter):", f.name); continue
+        meta = {}
+        for line in m.group(1).splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
+        when = datetime.strptime(meta["date"], "%Y-%m-%d %H:%M").replace(tzinfo=RIYADH)
+        if when > now:
+            continue
+        topic = meta.get("topic", "feasibility")
+        if topic not in TOPICS:
+            topic = "feasibility"
+        slug = re.sub(r"[^a-z0-9-]", "", meta["slug"].lower())
+        path = f"/{when:%Y}/{when:%m}/{slug}.html"
+        html_body = markdown.markdown(m.group(2), extensions=["tables", "sane_lists"])
+        html_body = scrub(html_body, TOPICS[topic][2])
+        lead, html_body = G.lead_and_rest(html_body)
+        html_body, _ = B.toc_and_ids(html_body)
+        sp = BeautifulSoup(html_body, "lxml")
+        toc_items = [(h["id"], h.get_text(" ", strip=True)) for h in sp.find_all("h2") if h.get("id")]
+        iso = when.isoformat()
+        p = {"path": path, "type": "POST", "title": meta["title"], "topic": topic, "published": iso,
+             "updated": meta.get("updated", iso), "lead": lead, "toc_items": toc_items,
+             "body": insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")),
+             "desc": meta.get("description") or desc_of(lead, html_body)}
+        p["mins"], p["words"] = G.reading_minutes(lead + html_body)
+        p["photo"] = meta.get("photo") or take_photo(topic)
+        redirects.pop(path, None)
+        out.append(p)
+    return out
+
+
+def build(feed, dist):
+    dist = Path(dist)
+    if dist.exists():
+        shutil.rmtree(dist)
+    (dist / "assets").mkdir(parents=True)
+    for f in ("site.css", "site.js", "mark.svg"):
+        shutil.copy(HERE / f, dist / "assets" / f)
+    snap_file = CONTENT / "legacy.json"
+    if feed == "--snapshot":
+        snap = json.load(open(snap_file))
+        keep, redirects, extra = snap["keep"], snap["redirects"], snap["extra"]
+        for p in keep:
+            p["toc_items"] = [tuple(x) for x in p["toc_items"]]
+            USED.add(p["photo"])
+    else:
+        keep, redirects, extra = prepare_legacy(feed)
+        CONTENT.mkdir(exist_ok=True)
+        json.dump({"keep": [{k: p[k] for k in SNAP_KEYS} for p in keep], "redirects": redirects, "extra": extra},
+                  open(snap_file, "w"), ensure_ascii=False)
+    new_posts = load_new_posts(redirects)
+    keep = sorted(keep + new_posts, key=lambda x: x["published"], reverse=True)
+    print("new posts published:", len(new_posts))
+
 
     org = {"@type": "Organization", "@id": SITE + "/#org", "name": "شركة جوجان لخدمات الأعمال", "alternateName": "Googan Business Services Company",
            "url": CONSULT, "logo": LOGO, "email": "info@googan.net", "sameAs": [CONSULT, TRANSL]}
