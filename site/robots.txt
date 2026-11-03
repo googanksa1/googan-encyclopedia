@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_posts/
+
+Sitemap: https://www.bloggoogan.com/sitemap.xml
