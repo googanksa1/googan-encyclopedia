@@ -646,6 +646,8 @@ def load_new_posts(redirects):
              "desc": meta.get("description") or desc_of(lead, html_body)}
         p["mins"], p["words"] = G.reading_minutes(lead + html_body)
         p["photo"] = meta.get("photo") or take_photo(topic)
+        if meta.get("seo"):
+            p["seo_title"] = meta["seo"]
         redirects.pop(path, None)
         out.append(p)
     return out
