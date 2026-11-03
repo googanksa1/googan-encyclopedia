@@ -392,3 +392,4 @@ main{flex:1 0 auto}
 .online-box .ob-note{margin:14px 0 0;font-size:13px;color:#b9b9d6}
 @media (max-width:600px){.online-box{padding:20px 18px}.online-box .ob-title{font-size:20px}.online-box .btn{width:100%}}
 .prose td a[href*="google.com/maps"]{white-space:nowrap;word-break:keep-all;overflow-wrap:normal}
+.prose td,.prose th{word-break:normal;overflow-wrap:normal}.prose td:first-child,.prose th:first-child{min-width:5.5em}
