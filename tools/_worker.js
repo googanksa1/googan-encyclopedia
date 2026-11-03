@@ -13,7 +13,7 @@ export default {
     const go = (to, code = 301) => Response.redirect(new URL(to, url.origin).toString(), code);
     const notFound = async () => {
       const nf = await env.ASSETS.fetch(new Request(new URL("/404.html", url.origin)));
-      return new Response(request.method === "HEAD" ? null : nf.body, { status: 404, headers: { "content-type": "text/html; charset=utf-8" } });
+      return new Response(request.method === "HEAD" ? null : nf.body, { status: 404, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
     };
 
     if (url.hostname === "bloggoogan.com") return go("https://www.bloggoogan.com" + url.pathname + url.search);
