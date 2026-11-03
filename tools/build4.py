@@ -400,7 +400,7 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
  <div class="wrap foot-grid">
   <div class="foot-about"><b>{NAME}</b><p>مرجع تعليمي عربي تحرره شركة جوجان لخدمات الأعمال في الرياض، في محورين: دراسات الجدوى والاستثمار، والترجمة المعتمدة.</p></div>
   <div><h2>اطلب خدمة</h2><a href="{SVC['c_studies']}">دراسات الجدوى</a><a href="{SVC['c_sidf']}">دراسة جدوى للصندوق الصناعي</a><a href="{SVC['t_certified']}">الترجمة المعتمدة</a><a href="{SVC['t_legal']}">الترجمة القانونية</a></div>
-  <div><h2>الموسوعة</h2><a href="/topics/">فهرس المحاور</a><a href="/about/">عن الموسوعة ومنهجية التحرير</a><a href="/sitemap.xml">خريطة الموقع</a></div>
+  <div><h2>الموسوعة</h2><a href="/topics/">فهرس المحاور</a><a href="/about/">عن الموسوعة ومنهجية التحرير</a></div>
   <div><h2>تواصل</h2><a href="mailto:info@googan.net">{icon('mail')} info@googan.net</a><a href="{CONSULT}">googanconsult.com</a><a href="{TRANSL}">googantranslation.com</a></div>
  </div>
  <div class="wrap copy"><span>© {NOW.year} شركة جوجان لخدمات الأعمال، الرياض</span><span>الصور التوضيحية من Unsplash</span></div>
