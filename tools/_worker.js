@@ -7,6 +7,8 @@ const REDIRECTS = /*REDIRECTS*/{};
 const LIBRARY = /*LIBRARY*/"";
 const LIBRARY_LIVE = /*LIBRARY_LIVE*/false;
 const LIB_REDIRECTS = /*LIB_REDIRECTS*/{};
+// Books withdrawn at the owner's request: answer 410 Gone (and never from cache) so no stale copy is served.
+const LIB_GONE = /*LIB_GONE*/[];
 const KEY = (p) => p.replace(/^\/+/, "").replace(/\.html$/, "").replace(/[^A-Za-z0-9_-]/g, "_");
 
 export default {
@@ -71,6 +73,10 @@ async function library(request, env, url, path) {
     return new Response(request.method === "HEAD" ? null : r.body, { status, headers: h });
   };
   if (path.startsWith("/_library")) return Response.redirect(new URL(path.replace(/^\/_library/, "") || "/", url.origin).toString(), 301);
+  if (LIB_GONE.some((g) => path === g.slice(0, -1) || path.startsWith(g))) {
+    const nf = await fetchAsset("/_library/404.html");
+    return send(nf, 410, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" });
+  }
   const to = LIB_REDIRECTS[path];
   if (to) return Response.redirect(new URL(to, url.origin).toString(), 301);
   let r = await fetchAsset("/_library" + path);

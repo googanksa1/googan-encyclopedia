@@ -30,6 +30,10 @@ BOOKS = [{
     {"slug": "principles-of-addiction-treatment", "file": "principles-of-addiction-treatment.json", "title": "مبادىء علاج الإدمان: دليل قائم على البحث", "orig": "Principles of Drug Addiction Treatment: A Research-Based Guide (Third Edition)", "authors": "National Institute on Drug Abuse, National Institutes of Health, U.S. Department of Health and Human Services", "authors_ar": "", "desc": "دليل قائم على البحث يعرض مبادئ المعالجة الفعالة لإدمان المخدرات، ويجيب عن الأسئلة الشائعة حول العلاج، ويصف أنواع برامج العلاج والمناهج الدوائية والسلوكية القائمة على الأدلة.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 2], "page_labels": False, "cover_spread": True},
 ]
 
+# Withdrawn at the owner's request (no publication approval). Their URLs answer 410 Gone.
+WITHDRAWN = ["advanced-curriculum-1", "advanced-curriculum-2", "advanced-curriculum-3", "advanced-curriculum-4", "advanced-curriculum-5",
+             "anger-management-therapist", "anger-management-client", "anger-management-participant"]
+
 # Subject categories (shown as sections on /books/ and as their own pages /books/c/<key>/).
 # Add a new subject here, then give each book "category": "<key>" and a "type" from TYPES.
 CATEGORIES = {

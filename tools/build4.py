@@ -909,6 +909,8 @@ def build(feed, dist):
     lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
     worker = (HERE / "_worker.js").read_text(encoding="utf-8").replace("/*REDIRECTS*/{}", json.dumps({**redirects, **lib_redirects}, ensure_ascii=False))
     worker = worker.replace("/*LIB_REDIRECTS*/{}", json.dumps(lib["host_redirects"], ensure_ascii=False))
+    import books as _books
+    worker = worker.replace("/*LIB_GONE*/[]", json.dumps([f"/books/{s}/" for s in _books.WITHDRAWN]))
     worker = worker.replace("/*LIBRARY_LIVE*/false", "true" if LIBRARY_LIVE else "false").replace("/*LIBRARY*/\"\"", json.dumps(LIBRARY))
     (dist / "_worker.js").write_text(worker, encoding="utf-8")
     json.dump({"kept": [p["path"] for p in keep], "redirects": redirects, "extra_reasons": extra}, open(HERE / "manifest.json", "w"), ensure_ascii=False, indent=0)
