@@ -12,7 +12,17 @@ BOOKS = [{
     "authors_ar": "تيرنس غورسكي وميرلين ميلر",
     "desc": "النسخة العربية من كتاب «Staying Sober» لتيرنس غورسكي وميرلين ميلر: دليل عملي لفهم الانتكاسة في مرض الإدمان وعلاماتها التحذيرية وكيفية التخطيط للوقاية منها، مع دور الأسرة ومجموعات المساعدة الذاتية.",
     "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال",
-}]
+},
+    {"slug": "relapse-prevention-workbook", "file": "relapse-prevention-workbook.json", "title": "كتيب تمارين للوقاية من الانتكاس", "orig": "Relapse Prevention Counseling Workbook: Practical Exercises for Managing High-Risk Situations", "authors": "Terence T. Gorski with Arthur B. Trundy", "authors_ar": "تيرنس ت. جورسكي", "desc": "كتيب تمارين عملية للمتعافين من تعاطي الكحول والمخدرات، يتضمن سبعة تمارين للالتزام بالتوقف وخطة التدخل عند الانتكاس وتحديد المواقف عالية الخطورة وإدارتها ووضع خطة التعافي، مع ملاحق ونماذج وعقود.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 1], "page_labels": False, "cover_spread": False},
+    {"slug": "therapy-manual-cbt-cocaine", "file": "therapy-manual-cbt-cocaine.json", "title": "الأدلة العلاجية لإدمان المخدرات - الدليل الأول: النموذج المعرفي السلوكي، علاج إدمان الكوكايين (المخدرات)", "orig": "", "authors": "Kathleen M. Carroll, Ph.D", "authors_ar": "الدكتورة كاثلين كارول", "desc": "دليل للمعالجين في العلاج المعرفي السلوكي لتعاطي الكوكايين: مبادئه وبناء جلساته، وجلسة تمهيدية وثمانية موضوعات لمهارات التكيف كالتغلب على الشوق ومهارات الرفض وحل المشاكل، مع ملحقين عن تدريب المعالجين والبحث الإكلينيكي.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 1], "page_labels": False, "cover_spread": False},
+    {"slug": "cbt-coping-skills", "file": "cbt-coping-skills.json", "title": "دليل المعالجة المعرفية السلوكية بمهارات المقاومة", "orig": "Cognitive-Behavioral Coping Skills Therapy Manual: A Clinical Research Guide for Therapists Treating Individuals With Alcohol Abuse and Dependence", "authors": "National Institute on Alcohol Abuse and Alcoholism", "authors_ar": "المعهد الوطني لتعاطي الكحول والإدمان على الكحول", "desc": "دليل بحثي للمعالجين القائمين على علاج من يتعاطون الكحول ويدمنونه، أُعد لمشروع MATCH، يعرض برنامج العلاج المعرفي السلوكي بمهارات المقاومة وبنية جلساته الأساسية والاختيارية وتمريناتها وأوراقها التذكيرية.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 3], "page_labels": False, "cover_spread": False},
+    {"slug": "matrix-counselor-manual", "file": "matrix-counselor-manual.json", "title": "دليل المرشد العلاجي", "orig": "Counselor's Treatment Manual: Matrix Intensive Outpatient Treatment for People With Stimulant Use Disorders", "authors": "SAMHSA", "authors_ar": "مركز علاج تعاطي المواد المخدرة", "desc": "دليل لتطبيق نموذج مصفوفة العلاج المكثف ماتريكس في العيادات الخارجية لمن يعانون اضطرابات تعاطي المنشطات، يشرح الجلسات الفردية والمشتركة ومجموعات مهارات التعافي المبكر والوقاية من الانتكاس والدعم الاجتماعي مع نشراتها.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 1], "page_labels": False, "cover_spread": False},
+    {"slug": "matrix-client-handbook", "file": "matrix-client-handbook.json", "title": "دليل العميل: نموذج مصفوفة للعلاج المكثف ماتريكس في العيادات الخارجية للأشخاص الذين يعانون من اضطرابات تعاطي المنشطات", "orig": "", "authors": "", "authors_ar": "جين إل أوبيرت، ريتشارد إيه روسون، مايكل جيه ماكان، والتر لينج", "desc": "كتيب نشرات للعميل في برنامج ماتريكس للعلاج المكثف في العيادات الخارجية لاضطرابات تعاطي المنشطات، يضم نشرات الجلسات الفردية/المشتركة ومهارات التعافي المبكر والوقاية من الانتكاس وجلسات اختيارية.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 2], "page_labels": False, "cover_spread": False},
+    {"slug": "matrix-family-education", "file": "matrix-family-education.json", "title": "دليل المرشد في التوعية الأسرية", "orig": "Counselor's Family Education Manual: Matrix Intensive Outpatient Treatment for People With Stimulant Use Disorders", "authors": "SAMHSA", "authors_ar": "مركز علاج تعاطي المواد المخدرة", "desc": "دليل المرشد لمجموعة التوعية الأسرية ضمن نموذج مصفوفة العلاج المكثف ماتريكس، يقدم تعليمات اثنتي عشرة جلسة للعملاء وأسرهم حول المحفزات والاشتياق والكحول والمنشطات والانتكاس وإعادة بناء الثقة والتواصل، مع النشرات والملاحق.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0, 1], "page_labels": False, "cover_spread": False},
+    {"slug": "matrix-women", "file": "matrix-women.json", "title": "إستخدام مصفوفة ماتريكس مع النساء", "orig": "Using Matrix with Women Clients", "authors": "SAMHSA", "authors_ar": "إدارة \"خدمات إساءة استعمال المواد المخدرة والصحة العقلية\" (SAMHSA)", "desc": "مكمل لمصفوفة العلاج المكثف للمرضى الخارجيين ممن يعانون من اضطرابات استخدام المنشطات، يقدم جلسات جماعية للنساء فقط حول العلاقات والإساءة والعنف والعواطف والأمومة وصورة الجسد والحمل، مع نشرات للمشاركات.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [1, 2], "page_labels": False, "cover_spread": False},
+    {"slug": "matrix-client-pocket-guide", "file": "matrix-client-pocket-guide.json", "title": "كُتيب جيب العميل", "orig": "Client's Treatment Companion", "authors": "SAMHSA", "authors_ar": "", "desc": "كتيب شخصي ضمن نموذج مصفوفة العلاج المكثف ماتريكس في العيادات الخارجية للأشخاص الذين يعانون من اضطرابات تعاطي المنشطات، يتيح للعميل تدوين أفكاره عن المحفزات وأهداف التعافي والعلاقات ومبررات الانتكاسة.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [], "page_labels": False, "cover_spread": False},
+    {"slug": "therapeutic-community-trainers", "file": "therapeutic-community-trainers.json", "title": "منهج المجتمع العلاجي: دليل المُدربين", "orig": "Therapeutic Community Curriculum: Trainer's Manual", "authors": "Center for Substance Abuse Treatment, Substance Abuse and Mental Health Services Administration (U.S. Department of Health and Human Services)", "authors_ar": "مركز علاج ادمان المخدرات – إدارة علاج الإدمان وخدمات الصحة العقلية", "desc": "دليل للمدربين يقدم منهج المجتمع العلاجي في أحد عشر نموذجاً تدريبياً، تشمل تاريخه وتطوره، والمجتمع بوصفه أسلوباً منهجياً، وبنيته الاجتماعية، ودور فريق العمل، وطرق العلاج، ومراحل البرنامج وكيف يتغير النزلاء.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0], "page_labels": False, "cover_spread": False},
+]
 
 FIX = [(re.compile(r'([.،:؛])(?=[ء-ي])'), r'\1 '), (re.compile(r'([ً-ْ])\1+'), r'\1')]
 
@@ -23,9 +33,12 @@ def clean(t):
     return t
 
 
-def render(blocks, esc):
-    out = []
+def render(blocks, esc, limit=None):
+    out, words = [], 0
     for kind, txt in blocks:
+        if limit and words > limit:
+            break
+        words += len(txt.split())
         if kind == "mixed":
             a, _, b = txt.partition("||")
             out.append(f"<p><strong>{esc(clean(a))}</strong> {esc(clean(b))}</p>")
@@ -67,19 +80,25 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         shutil.copytree(imgs, root / bk["slug"] / "pages")
         credit = f'<p class="bk-credit">{icon("book")}<span>{esc(bk["credit"])}. <a href="{transl}">googantranslation.com</a></span></p>'
         toc_cards = "".join(
-            f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}<small>صفحة {s.get("printed", s["page"] - 1)}</small></a></li>'
+            f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}{"<small>صفحة " + str(s.get("printed", s["page"] - 1)) + "</small>" if bk.get("page_labels", True) else ""}</a></li>'
             for s in secs)
         pv = bk.get("preview", PREVIEW)
-        preview = "".join(f'<section class="bk-pre"><h2>{esc(label(secs[i]))}</h2><div class="prose bk-text">{render(secs[i]["blocks"], esc)}</div></section>' for i in pv)
-        info = f"""<dl class="bk-info"><div><dt>العنوان الأصلي</dt><dd dir="ltr">{esc(bk['orig'])}</dd></div><div><dt>المؤلفان</dt><dd>{esc(bk['authors_ar'])} <span dir="ltr">({esc(bk['authors'])})</span></dd></div><div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>عدد الصفحات</dt><dd>{npages - 2} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
+        spread = bk.get("cover_spread", True)   # book 1: PDF page 1 was a front+back cover spread
+        npg = npages - 2 if spread else npages
+        preview = "".join(f'<section class="bk-pre"><h2>{esc(label(secs[i]))}</h2><div class="prose bk-text">{render(secs[i]["blocks"], esc, 900)}</div></section>' for i in pv)
+        pre_html = (f"""<div class="wrap narrow bk-preview"><h2 class="bk-pre-h">من الصفحات الأولى</h2>{preview}
+<p class="bk-go"><a class="btn" href="{read}#p={secs[pv[-1] + 1]['page'] if pv[-1] + 1 < len(secs) else secs[-1]['page']}">أكمل القراءة في الكتاب</a></p>{credit}</div>""" if pv else "")
+        orig_row = f'<div><dt>العنوان الأصلي</dt><dd dir="ltr">{esc(bk["orig"])}</dd></div>' if bk.get("orig") else ""
+        who = " ".join(x for x in (esc(bk.get("authors_ar", "")), f'<span dir="ltr">({esc(bk["authors"])})</span>' if bk.get("authors") else "") if x)
+        who_row = f'<div><dt>{"المؤلفان" if bk.get("page_labels", True) else "التأليف"}</dt><dd>{who}</dd></div>' if who else ""
+        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
         body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (bk["title"], None)])) + f"""
 <div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف كتاب {esc(bk['title'])}" width="420" height="625"></a>
 <div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a></p>{credit}</div></div>
 <div class="wrap bk-contents"><h2>فهرس الكتاب</h2><p class="bk-hint">اختر فصلاً ليُفتح الكتاب على صفحته مباشرة.</p><ol class="bk-chs">{toc_cards}</ol></div>
-<div class="wrap narrow bk-preview"><h2 class="bk-pre-h">من الصفحات الأولى</h2>{preview}
-<p class="bk-go"><a class="btn" href="{read}#p={secs[pv[-1] + 1]['page'] if pv[-1] + 1 < len(secs) else secs[-1]['page']}">أكمل القراءة في الكتاب</a></p>{credit}</div>"""
+{pre_html}"""
         (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
-        ld = [{"@context": "https://schema.org", "@type": "Book", "name": bk["title"], "inLanguage": "ar", "numberOfPages": npages - 2,
+        ld = [{"@context": "https://schema.org", "@type": "Book", "name": bk["title"], "inLanguage": "ar", "numberOfPages": npg,
                "author": [{"@type": "Person", "name": n.strip()} for n in bk["authors"].split("&")],
                "translator": {"@type": "Organization", "name": "شركة جوجان لخدمات الأعمال"}, "workTranslation": None,
                "translationOfWork": {"@type": "Book", "name": bk["orig"], "inLanguage": "en"}, "url": page.__globals__["SITE"] + base,
@@ -88,7 +107,7 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body, ld=ld, og_image=page.__globals__["SITE"] + base + "pages/001.webp"), encoding="utf-8")
         urls.append(base)
         opts = "".join(f'<option value="{s["page"]}">{esc(label(s))}</option>' for s in secs)
-        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-ratio="{ratio}" style="--rd-ratio:{ratio}" data-dir="{base}pages/" data-slug="{bk['slug']}">
+        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-ratio="{ratio}" data-spread="{1 if spread else 0}" style="--rd-ratio:{ratio}" data-dir="{base}pages/" data-slug="{bk['slug']}">
 <div class="rd-bar"><a class="rd-back" href="{base}">{esc(bk['title'])}</a>
 <label class="rd-toc"><span class="sr">انتقل إلى فصل</span><select data-toc><option value="">الفهرس</option>{opts}</select></label>
 <span class="rd-count" data-count aria-live="polite"></span>
@@ -103,7 +122,7 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         for i, s in enumerate(secs):   # retired text-chapter URLs -> same place in the reader
             redirects[f"{base}{i+1:02d}/"] = f"{read}#p={s['page']}"
             redirects[f"{base}{i+1:02d}"] = f"{read}#p={s['page']}"
-        cards.append(f'<li class="bk-card"><a href="{base}"><img src="{base}pages/001.webp" alt="" width="120" height="179" loading="lazy"><span><strong>{esc(bk["title"])}</strong><span>{esc(bk["authors_ar"])}</span><span>{npages - 2} صفحة</span></span></a></li>')
+        cards.append(f'<li class="bk-card"><a href="{base}"><img src="{base}pages/001.webp" alt="" width="120" height="179" loading="lazy"><span><strong>{esc(bk["title"])}</strong><span>{esc(bk["authors_ar"])}</span><span>{npg} صفحة</span></span></a></li>')
     body = banner("مكتبة الكتب", "كتب كاملة ترجمها قسم الترجمة في جوجان، تُقرأ مجاناً على الموقع بتقليب الصفحات.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + f'<div class="wrap narrow"><ul class="bk-cards">{"".join(cards)}</ul></div>'
     (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً على موسوعة جوجان بتقليب الصفحات.", "/books/", body), encoding="utf-8")
     return urls, redirects

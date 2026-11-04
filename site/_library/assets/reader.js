@@ -35,11 +35,13 @@
   }
   for (var i = 0; i < pgs.length; i++) pgs[i].dataset.pos = i;
 
+  var SP = root.dataset.spread !== "0";
   function label(pos) {
     var k = kOf(pos);
     if (k === 1) return "الغلاف";
-    if (k === N) return "الغلاف الخلفي";
-    return "صفحة " + (k - 1).toLocaleString("ar-EG") + " من " + (N - 2).toLocaleString("ar-EG");
+    if (SP && k === N) return "الغلاف الخلفي";
+    var n = SP ? k - 1 : k, tot = SP ? N - 2 : N;
+    return "صفحة " + n.toLocaleString("ar-EG") + " من " + tot.toLocaleString("ar-EG");
   }
   function current() { return pf.getCurrentPageIndex(); }
   function update() {

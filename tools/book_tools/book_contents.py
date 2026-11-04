@@ -48,7 +48,7 @@ def blocks_for(first, last):
     for pn in range(first, last + 1):
         h = d[pn - 1].rect.height
         for l in L.page_lines(d, pn - 1, legacy):
-            if l["text"] and h * .07 < l["y"] < h * .9:   # drop running header, page number, footer
+            if l["text"] and h * .07 < l["y"] < h * .9 and not re.search(r"\.{5,}|…{3,}", l["text"]):   # drop running header, page number, footer, contents-page leader lines
                 lines.append(dict(l, pn=pn))
     if not lines:
         return []
