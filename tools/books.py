@@ -64,16 +64,17 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         shutil.copytree(imgs, root / bk["slug"] / "pages")
         credit = f'<p class="bk-credit">{icon("book")}<span>{esc(bk["credit"])}. <a href="{transl}">googantranslation.com</a></span></p>'
         toc_cards = "".join(
-            f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}<small>صفحة {s["page"] - 1}</small></a></li>'
+            f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}<small>صفحة {s.get("printed", s["page"] - 1)}</small></a></li>'
             for s in secs)
-        preview = "".join(f'<section class="bk-pre"><h2>{esc(label(secs[i]))}</h2><div class="prose bk-text">{render(secs[i]["blocks"], esc)}</div></section>' for i in PREVIEW)
+        pv = bk.get("preview", PREVIEW)
+        preview = "".join(f'<section class="bk-pre"><h2>{esc(label(secs[i]))}</h2><div class="prose bk-text">{render(secs[i]["blocks"], esc)}</div></section>' for i in pv)
         info = f"""<dl class="bk-info"><div><dt>العنوان الأصلي</dt><dd dir="ltr">{esc(bk['orig'])}</dd></div><div><dt>المؤلفان</dt><dd>{esc(bk['authors_ar'])} <span dir="ltr">({esc(bk['authors'])})</span></dd></div><div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>عدد الصفحات</dt><dd>{npages - 2} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
         body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (bk["title"], None)])) + f"""
 <div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف كتاب {esc(bk['title'])}" width="420" height="625"></a>
 <div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a></p>{credit}</div></div>
 <div class="wrap bk-contents"><h2>فهرس الكتاب</h2><p class="bk-hint">اختر فصلاً ليُفتح الكتاب على صفحته مباشرة.</p><ol class="bk-chs">{toc_cards}</ol></div>
 <div class="wrap narrow bk-preview"><h2 class="bk-pre-h">من الصفحات الأولى</h2>{preview}
-<p class="bk-go"><a class="btn" href="{read}#p={secs[PREVIEW[-1] + 1]['page']}">أكمل القراءة في الكتاب</a></p>{credit}</div>"""
+<p class="bk-go"><a class="btn" href="{read}#p={secs[pv[-1] + 1]['page'] if pv[-1] + 1 < len(secs) else secs[-1]['page']}">أكمل القراءة في الكتاب</a></p>{credit}</div>"""
         (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
         ld = [{"@context": "https://schema.org", "@type": "Book", "name": bk["title"], "inLanguage": "ar", "numberOfPages": npages - 2,
                "author": [{"@type": "Person", "name": n.strip()} for n in bk["authors"].split("&")],
