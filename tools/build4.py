@@ -623,6 +623,8 @@ def prepare_legacy(feed):
 SNAP_KEYS = ("path", "type", "title", "topic", "published", "updated", "lead", "body", "toc_items", "desc", "mins", "words", "photo")
 CONTENT = HERE / "content"
 RIYADH = __import__("datetime").timezone(__import__("datetime").timedelta(hours=3))
+LIBRARY_TOPICS = {"translated-studies"}
+LIBRARY_CUTOFF = datetime(2026, 11, 4, 0, 0, tzinfo=RIYADH)
 
 
 def load_new_posts(redirects):
@@ -643,6 +645,10 @@ def load_new_posts(redirects):
                 k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
         when = datetime.strptime(meta["date"], "%Y-%m-%d %H:%M").replace(tzinfo=RIYADH)
         if when > now and not os.environ.get("PREVIEW_ALL"):
+            continue
+        # Owner decision 4 Nov 2026: books and translated studies move to library.bloggoogan.com.
+        # Studies not already live on the encyclopedia are held here and will publish on the library.
+        if meta.get("topic") in LIBRARY_TOPICS and when > LIBRARY_CUTOFF:
             continue
         topic = meta.get("topic", "feasibility")
         if topic not in TOPICS:
