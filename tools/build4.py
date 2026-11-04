@@ -17,6 +17,22 @@ HERE = Path(__file__).parent
 SITE = B.SITE
 NAME = "موسوعة جوجان للأعمال والاستثمار والترجمة"
 SHORT = "موسوعة جوجان"
+TAGLINE = "للأعمال والاستثمار والترجمة"
+STRIP = "مرجع عربي مجاني في الجدوى والاستثمار والترجمة المعتمدة"
+NAV = [("/topics/feasibility/", "دراسات الجدوى"), ("/topics/saudi-investment/", "الاستثمار في السعودية"), ("/topics/management/", "الإدارة"),
+       ("/topics/certified-translation/", "الترجمة المعتمدة"), ("/topics/", "كل المحاور"), ("/about/", "عن الموسوعة")]
+SEARCH_HOST = "bloggoogan.com"
+SEARCH_PH = "ابحث عن دليل…"
+SEARCH_LABEL = "الموسوعة"
+FEED = "/feeds/posts/default"
+FOOT_ABOUT = "مرجع تعليمي عربي تحرره شركة جوجان لخدمات الأعمال في الرياض، في محورين: دراسات الجدوى والاستثمار، والترجمة المعتمدة."
+FOOT_LINKS = [("/topics/", "فهرس المحاور"), ("/about/", "عن الموسوعة ومنهجية التحرير")]
+FOOT_H = "الموسوعة"
+LIBRARY = "https://library.bloggoogan.com"
+# Books and translated studies live on library.bloggoogan.com (owner decision, 4 Nov 2026).
+# Flip to True only after the library hostname is connected and verified: the encyclopedia then
+# drops them and 301-redirects their old URLs to the library.
+LIBRARY_LIVE = False or os.environ.get("LIBRARY_LIVE") == "1"
 CONSULT, TRANSL = B.CONSULT, B.TRANSL
 LOGO = "https://googanconsult.com/storage/settings/site/Ulnh7JiOy6P65aUaaHTSjHZG2DXZMOXhuzG6UwvK.png"
 MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
@@ -339,6 +355,7 @@ def insert_mid_cta(body, cta_html):
 def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", cls="", noindex=False, keywords=None, wa=None):
     url = SITE + path
     lds = "".join(f'<script type="application/ld+json">{json.dumps(o, ensure_ascii=False)}</script>\n' for o in (ld or []))
+    navl = "\n".join(f'   <a href="{u}">{n}</a>' for u, n in NAV)
     ogi = f'<meta property="og:image" content="{esc(og_image)}">\n<meta name="twitter:card" content="summary_large_image">\n' if og_image else ""
     return f"""<!doctype html>
 <html lang="ar" dir="rtl">
@@ -362,35 +379,25 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
 <link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css?v={V}">
-<link rel="alternate" type="application/atom+xml" title="{NAME}" href="/feeds/posts/default">
+<link rel="alternate" type="application/atom+xml" title="{NAME}" href="{FEED}">
 {lds}</head>
 <body class="{cls}">
 <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
-<div class="strip"><div class="wrap strip-row"><span>مرجع عربي مجاني في الجدوى والاستثمار والترجمة المعتمدة</span><nav aria-label="أقسام جوجان"><a href="{CONSULT}">قسم الدراسات والاستشارات</a><a href="{TRANSL}">قسم الترجمة المعتمدة</a></nav></div></div>
+<div class="strip"><div class="wrap strip-row"><span>{STRIP}</span><nav aria-label="أقسام جوجان"><a href="{CONSULT}">قسم الدراسات والاستشارات</a><a href="{TRANSL}">قسم الترجمة المعتمدة</a></nav></div></div>
 <header class="top">
  <div class="wrap top-row">
-  <a class="logo" href="/" aria-label="{SHORT} — الصفحة الرئيسية"><img src="{LOGO}" alt="" width="44" height="44" onerror="this.onerror=null;this.src='/assets/mark.svg'"><span><b>{SHORT}</b><i>للأعمال والاستثمار والترجمة</i></span></a>
+  <a class="logo" href="/" aria-label="{SHORT} — الصفحة الرئيسية"><img src="{LOGO}" alt="" width="44" height="44" onerror="this.onerror=null;this.src='/assets/mark.svg'"><span><b>{SHORT}</b><i>{TAGLINE}</i></span></a>
   <nav class="nav" aria-label="التنقل الرئيسي">
-   <a href="/topics/feasibility/">دراسات الجدوى</a>
-   <a href="/topics/saudi-investment/">الاستثمار في السعودية</a>
-   <a href="/topics/management/">الإدارة</a>
-   <a href="/topics/certified-translation/">الترجمة المعتمدة</a>
-   <a href="/topics/">كل المحاور</a>
-   <a href="/about/">عن الموسوعة</a>
+{navl}
   </nav>
   <details class="menu"><summary aria-label="القائمة">{icon('menu','ic open')}{icon('close','ic shut')}</summary>
   <nav class="mnav" aria-label="قائمة الجوال">
-   <a href="/topics/feasibility/">دراسات الجدوى</a>
-   <a href="/topics/saudi-investment/">الاستثمار في السعودية</a>
-   <a href="/topics/management/">الإدارة</a>
-   <a href="/topics/certified-translation/">الترجمة المعتمدة</a>
-   <a href="/topics/">كل المحاور</a>
-   <a href="/about/">عن الموسوعة</a>
+{navl}
   </nav></details>
   <form class="search" action="https://www.google.com/search" method="get" role="search" data-search>
-   <input type="hidden" name="as_sitesearch" value="bloggoogan.com">
-   <label class="sr" for="q-top">ابحث في الموسوعة</label>
-   <input id="q-top" type="search" name="q" placeholder="ابحث عن دليل…" autocomplete="off" data-q>
+   <input type="hidden" name="as_sitesearch" value="{SEARCH_HOST}">
+   <label class="sr" for="q-top">ابحث في {SEARCH_LABEL}</label>
+   <input id="q-top" type="search" name="q" placeholder="{SEARCH_PH}" autocomplete="off" data-q>
    <button type="submit" aria-label="بحث">{icon('search')}</button>
    <div class="results" role="listbox" hidden></div>
   </form>
@@ -401,9 +408,9 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
 </main>
 <footer class="foot">
  <div class="wrap foot-grid">
-  <div class="foot-about"><b>{NAME}</b><p>مرجع تعليمي عربي تحرره شركة جوجان لخدمات الأعمال في الرياض، في محورين: دراسات الجدوى والاستثمار، والترجمة المعتمدة.</p></div>
+  <div class="foot-about"><b>{NAME}</b><p>{FOOT_ABOUT}</p></div>
   <div><h2>اطلب خدمة</h2><a href="{SVC['c_studies']}">دراسات الجدوى</a><a href="{SVC['c_sidf']}">دراسة جدوى للصندوق الصناعي</a><a href="{SVC['t_certified']}">الترجمة المعتمدة</a><a href="{SVC['t_legal']}">الترجمة القانونية</a></div>
-  <div><h2>الموسوعة</h2><a href="/topics/">فهرس المحاور</a><a href="/about/">عن الموسوعة ومنهجية التحرير</a></div>
+  <div><h2>{FOOT_H}</h2>{"".join(f'<a href="{u}">{n}</a>' for u, n in FOOT_LINKS)}</div>
   <div><h2>تواصل</h2><a href="mailto:info@googan.net">{icon('mail')} info@googan.net</a><a href="{CONSULT}">googanconsult.com</a><a href="{TRANSL}">googantranslation.com</a></div>
  </div>
  <div class="wrap copy"><span>© {NOW.year} شركة جوجان لخدمات الأعمال، الرياض</span><span>الصور التوضيحية من Unsplash</span></div>
@@ -627,7 +634,7 @@ LIBRARY_TOPICS = {"translated-studies"}
 LIBRARY_CUTOFF = datetime(2026, 11, 4, 0, 0, tzinfo=RIYADH)
 
 
-def load_new_posts(redirects):
+def load_new_posts(redirects, library=False):
     """New articles: content/posts/*.md with a front-matter block between --- lines.
     Fields: title, slug, topic, date (YYYY-MM-DD HH:MM, Riyadh time), description (optional), photo (optional).
     A post is published only when its date has passed."""
@@ -647,14 +654,17 @@ def load_new_posts(redirects):
         if when > now and not os.environ.get("PREVIEW_ALL"):
             continue
         # Owner decision 4 Nov 2026: books and translated studies move to library.bloggoogan.com.
-        # Studies not already live on the encyclopedia are held here and will publish on the library.
-        if meta.get("topic") in LIBRARY_TOPICS and when > LIBRARY_CUTOFF:
+        # library=True loads only those; the encyclopedia keeps the ones already live until LIBRARY_LIVE.
+        in_lib = meta.get("topic") in LIBRARY_TOPICS
+        if library and not in_lib:
+            continue
+        if not library and in_lib and (LIBRARY_LIVE or when > LIBRARY_CUTOFF):
             continue
         topic = meta.get("topic", "feasibility")
         if topic not in TOPICS:
             topic = "feasibility"
         slug = re.sub(r"[^a-z0-9-]", "", meta["slug"].lower())
-        path = f"/{when:%Y}/{when:%m}/{slug}.html"
+        path = f"/studies/{slug}/" if library else f"/{when:%Y}/{when:%m}/{slug}.html"
         html_body = markdown.markdown(m.group(2), extensions=["tables", "sane_lists"])
         html_body = scrub(html_body, TOPICS[topic][2])
         if meta.get("city"):
@@ -664,7 +674,7 @@ def load_new_posts(redirects):
         sp = BeautifulSoup(html_body, "lxml")
         toc_items = [(h["id"], h.get_text(" ", strip=True)) for h in sp.find_all("h2") if h.get("id")]
         iso = when.isoformat()
-        p = {"path": path, "type": "POST", "title": meta["title"], "topic": topic, "published": iso,
+        p = {"path": path, "type": "POST", "slug": slug, "old_path": f"/{when:%Y}/{when:%m}/{slug}.html", "title": meta["title"], "topic": topic, "published": iso,
              "updated": meta.get("updated", iso), "lead": lead, "toc_items": toc_items,
              "body": html_body if meta.get("city") else insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")),
              "desc": meta.get("description") or desc_of(lead, html_body)}
@@ -874,8 +884,11 @@ def build(feed, dist):
     (dist / "404.html").write_text(page(f"الصفحة غير موجودة | {SHORT}", "الصفحة غير موجودة.", "/404", nf, noindex=True), encoding="utf-8")
 
     import books
-    book_urls, book_redirects = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT, ver=V)
-    redirects = {**redirects, **book_redirects}
+    if LIBRARY_LIVE:
+        book_urls = []
+    else:
+        book_urls, book_redirects = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT, ver=V)
+        redirects = {**redirects, **book_redirects}
 
     # ---------------- search index, sitemap, robots, feed, headers, redirects
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
@@ -891,10 +904,15 @@ def build(feed, dist):
     (dist / "feeds" / "posts").mkdir(parents=True, exist_ok=True)
     (dist / "feeds" / "posts" / "default").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{keep[0]["updated"]}</updated>{fi}</feed>', encoding="utf-8")
     (dist / "_headers").write_text("/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n", encoding="utf-8")
-    worker = (HERE / "_worker.js").read_text(encoding="utf-8").replace("/*REDIRECTS*/{}", json.dumps(redirects, ensure_ascii=False))
+    import library
+    lib = library.build_library(dist, sys.modules[__name__])
+    lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
+    worker = (HERE / "_worker.js").read_text(encoding="utf-8").replace("/*REDIRECTS*/{}", json.dumps({**redirects, **lib_redirects}, ensure_ascii=False))
+    worker = worker.replace("/*LIB_REDIRECTS*/{}", json.dumps(lib["host_redirects"], ensure_ascii=False))
+    worker = worker.replace("/*LIBRARY_LIVE*/false", "true" if LIBRARY_LIVE else "false").replace("/*LIBRARY*/\"\"", json.dumps(LIBRARY))
     (dist / "_worker.js").write_text(worker, encoding="utf-8")
     json.dump({"kept": [p["path"] for p in keep], "redirects": redirects, "extra_reasons": extra}, open(HERE / "manifest.json", "w"), ensure_ascii=False, indent=0)
-    return {"kept": len(keep), "redirects": len(redirects), "topics": live_topics, "photos_used": len(USED)}
+    return {"kept": len(keep), "redirects": len(redirects), "topics": live_topics, "photos_used": len(USED), "library": lib["summary"]}
 
 
 if __name__ == "__main__":

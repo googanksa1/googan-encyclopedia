@@ -31,3 +31,14 @@ A post goes live at `/YYYY/MM/slug.html` on the first rebuild after its date (Ri
 Scheduled posts become visible only after a rebuild. A daily scheduled job runs
 `python3 tools/build4.py --snapshot site`, commits any change to `site/`, and pushes;
 Cloudflare Pages then deploys automatically.
+
+## Library — library.bloggoogan.com
+
+Books (`tools/books.py`) and translated studies (`topic: translated-studies`) are published on
+**مكتبة جوجان** at library.bloggoogan.com, not on the encyclopedia (owner decision, 4 Nov 2026).
+`tools/library.py` builds them into `site/_library/` on every rebuild; the worker serves that folder
+for the `library.*` hostname. Study URLs: `/studies/<slug>/`; books: `/books/<slug>/`.
+
+`LIBRARY_LIVE` in `tools/build4.py` stays `False` until the library hostname is connected to the
+Pages project and verified. Setting it to `True` removes books and studies from the encyclopedia and
+301-redirects their old URLs (`/books/…`, the old study URL, `/topics/translated-studies/`) to the library.
