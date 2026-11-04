@@ -24,6 +24,58 @@ BOOKS = [{
     {"slug": "therapeutic-community-trainers", "file": "therapeutic-community-trainers.json", "title": "منهج المجتمع العلاجي: دليل المُدربين", "orig": "Therapeutic Community Curriculum: Trainer's Manual", "authors": "Center for Substance Abuse Treatment, Substance Abuse and Mental Health Services Administration (U.S. Department of Health and Human Services)", "authors_ar": "مركز علاج ادمان المخدرات – إدارة علاج الإدمان وخدمات الصحة العقلية", "desc": "دليل للمدربين يقدم منهج المجتمع العلاجي في أحد عشر نموذجاً تدريبياً، تشمل تاريخه وتطوره، والمجتمع بوصفه أسلوباً منهجياً، وبنيته الاجتماعية، ودور فريق العمل، وطرق العلاج، ومراحل البرنامج وكيف يتغير النزلاء.", "credit": "تمت الترجمة لجمعية المشعل الخيرية وقويم. ترجمة وتدقيق: شركة جوجان لخدمات الأعمال", "preview": [0], "page_labels": False, "cover_spread": False},
 ]
 
+# Subject categories (shown as sections on /books/ and as their own pages /books/c/<key>/).
+# Add a new subject here, then give each book "category": "<key>" and a "type" from TYPES.
+CATEGORIES = {
+    "addiction": ("الإدمان والتعافي", "أدلة علاجية وكتيبات ومناهج تدريبية في علاج الإدمان والوقاية من الانتكاسة، للمعالجين والمرشدين والمتعافين وأسرهم."),
+}
+TYPES = {   # order = display order inside a category
+    "therapist": "أدلة للمعالجين والمرشدين",
+    "client": "كتيبات للمتعافين والمشاركين",
+    "training": "مناهج تدريبية",
+    "reference": "مراجع ومبادئ عامة",
+}
+BOOK_TYPE = {
+    "staying-sober": "client", "relapse-prevention-workbook": "client", "matrix-client-handbook": "client",
+    "matrix-client-pocket-guide": "client", "anger-management-client": "client", "anger-management-participant": "client",
+    "therapy-manual-cbt-cocaine": "therapist", "cbt-coping-skills": "therapist", "matrix-counselor-manual": "therapist",
+    "matrix-family-education": "therapist", "matrix-women": "therapist", "twelve-step-facilitation": "therapist",
+    "group-therapy-substance-abuse": "therapist", "motivational-enhancement-therapy": "therapist", "anger-management-therapist": "therapist",
+    "therapeutic-community-trainers": "training", "therapeutic-community-participants": "training", "addiction-counseling-curriculum": "training",
+    "advanced-curriculum-1": "training", "advanced-curriculum-2": "training", "advanced-curriculum-3": "training",
+    "advanced-curriculum-4": "training", "advanced-curriculum-5": "training",
+    "principles-of-addiction-treatment": "reference",
+}
+for _b in BOOKS:
+    _b.setdefault("category", "addiction")
+    _b.setdefault("type", BOOK_TYPE.get(_b["slug"], "reference"))
+
+
+def cover_card(bk, esc, npg=None):
+    n = f'<small>{npg} صفحة</small>' if npg else ""
+    return (f'<li><a class="bk-tile" href="/books/{bk["slug"]}/"><img src="/books/{bk["slug"]}/pages/001.webp" alt="" loading="lazy" width="180" height="255">'
+            f'<strong>{esc(bk["title"])}</strong>{n}</a></li>')
+
+
+def category_sections(esc, books=None, counts=None, heading="h2", limit=None):
+    """HTML: one block per category, grouped by type. Used by /books/, category pages and the library home."""
+    books = books or BOOKS
+    out = []
+    for key, (name, intro) in CATEGORIES.items():
+        bs = [b for b in books if b["category"] == key]
+        if not bs:
+            continue
+        groups = []
+        for t, tname in TYPES.items():
+            tb = [b for b in bs if b["type"] == t]
+            if tb:
+                n = len(tb)
+                tb = tb[:limit] if limit else tb
+                groups.append(f'<h3 class="bk-type">{tname} <span>({n})</span></h3><ul class="bk-tiles">{"".join(cover_card(b, esc, (counts or {}).get(b["slug"])) for b in tb)}</ul>')
+        out.append(f'<section class="bk-cat" id="c-{key}"><div class="sec-head"><{heading}>{name} <span class="bk-count">{len(bs)} كتاباً</span></{heading}><a class="link" href="/books/c/{key}/">كل كتب التصنيف</a></div><p class="bk-hint">{intro}</p>{"".join(groups)}</section>')
+    return "".join(out)
+
+
 FIX = [(re.compile(r'([.،:؛])(?=[ء-ي])'), r'\1 '), (re.compile(r'([ً-ْ])\1+'), r'\1')]
 
 
@@ -91,8 +143,8 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         orig_row = f'<div><dt>العنوان الأصلي</dt><dd dir="ltr">{esc(bk["orig"])}</dd></div>' if bk.get("orig") else ""
         who = " ".join(x for x in (esc(bk.get("authors_ar", "")), f'<span dir="ltr">({esc(bk["authors"])})</span>' if bk.get("authors") else "") if x)
         who_row = f'<div><dt>{"المؤلفان" if bk.get("page_labels", True) else "التأليف"}</dt><dd>{who}</dd></div>' if who else ""
-        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
-        body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (bk["title"], None)])) + f"""
+        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
+        body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (CATEGORIES[bk["category"]][0], f"/books/c/{bk['category']}/"), (bk["title"], None)])) + f"""
 <div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف كتاب {esc(bk['title'])}" width="420" height="625"></a>
 <div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a></p>{credit}</div></div>
 <div class="wrap bk-contents"><h2>فهرس الكتاب</h2><p class="bk-hint">اختر فصلاً ليُفتح الكتاب على صفحته مباشرة.</p><ol class="bk-chs">{toc_cards}</ol></div>
@@ -123,6 +175,17 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
             redirects[f"{base}{i+1:02d}/"] = f"{read}#p={s['page']}"
             redirects[f"{base}{i+1:02d}"] = f"{read}#p={s['page']}"
         cards.append(f'<li class="bk-card"><a href="{base}"><img src="{base}pages/001.webp" alt="" width="120" height="179" loading="lazy"><span><strong>{esc(bk["title"])}</strong><span>{esc(bk["authors_ar"])}</span><span>{npg} صفحة</span></span></a></li>')
-    body = banner("مكتبة الكتب", "كتب كاملة ترجمها قسم الترجمة في جوجان، تُقرأ مجاناً على الموقع بتقليب الصفحات.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + f'<div class="wrap narrow"><ul class="bk-cards">{"".join(cards)}</ul></div>'
-    (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً على موسوعة جوجان بتقليب الصفحات.", "/books/", body), encoding="utf-8")
+    counts = {b["slug"]: len(list((HERE / "content" / "books" / f"{b['slug']}-pages").glob("*.webp"))) - (2 if b.get("cover_spread", True) else 0) for b in BOOKS}
+    chips = "".join(f'<a class="bk-chip" href="/books/c/{k}/">{v[0]} <span>{sum(1 for b in BOOKS if b["category"] == k)}</span></a>' for k, v in CATEGORIES.items() if any(b["category"] == k for b in BOOKS))
+    body = banner("مكتبة الكتب", f"{len(BOOKS)} كتاباً ترجمها قسم الترجمة في جوجان، تُقرأ كاملة ومجاناً على الموقع بتقليب الصفحات.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + \
+        f'<div class="wrap"><nav class="bk-chips" aria-label="تصنيفات الكتب">{chips}</nav>{category_sections(esc, counts=counts)}</div>'
+    (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً بتقليب الصفحات، مصنفة حسب الموضوع ونوع الكتاب.", "/books/", body), encoding="utf-8")
+    for key, (name, intro) in CATEGORIES.items():
+        bs = [b for b in BOOKS if b["category"] == key]
+        if not bs:
+            continue
+        body = banner(name, intro, crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (name, None)])) + f'<div class="wrap">{category_sections(esc, bs, counts)}</div>'
+        (root / "c" / key).mkdir(parents=True, exist_ok=True)
+        (root / "c" / key / "index.html").write_text(page(f"{name}: كتب مترجمة | {short}", intro, f"/books/c/{key}/", body), encoding="utf-8")
+        urls.append(f"/books/c/{key}/")
     return urls, redirects

@@ -96,10 +96,9 @@ def _build(dist, M):
         redirects[k] = SITE + v
 
     # ---------------- home
-    book_cards = "".join(f'<li class="bk-card"><a href="/books/{b["slug"]}/"><strong>{esc(b["title"])}</strong><span>{esc(b["authors_ar"])}</span><span>{esc(b["credit"])}</span></a></li>' for b in books.BOOKS)
     home = banner(NAME, "كتب كاملة ودراسات علمية محكّمة ترجمها قسم الترجمة في شركة جوجان لخدمات الأعمال، تُقرأ مجاناً على الموقع مع ذكر المصدر الأصلي.", "", pc="pb") + f"""
 <div class="wrap narrow" style="padding-top:1.5rem">
-<section><div class="sec-head"><h2>الكتب</h2><a class="link" href="/books/">كل الكتب {icon('chev')}</a></div><ul class="bk-cards">{book_cards}</ul></section>
+<section><div class="sec-head"><h2>الكتب</h2><a class="link" href="/books/">كل الكتب ({len(books.BOOKS)}) {icon('chev')}</a></div>{books.category_sections(esc, heading="h3", limit=6)}</section>
 <section><div class="sec-head"><h2>أحدث الدراسات المترجمة</h2><a class="link" href="/studies/">كل الدراسات {icon('chev')}</a></div>{study_list(studies[:8])}</section>
 </div>"""
     site_ld = [{"@context": "https://schema.org", "@graph": [org, {"@type": "WebSite", "@id": SITE + "/#site", "name": NAME, "url": SITE + "/", "inLanguage": "ar", "publisher": {"@id": SITE + "/#org"}}]}]
