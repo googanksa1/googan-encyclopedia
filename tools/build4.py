@@ -32,7 +32,7 @@ LIBRARY = "https://library.bloggoogan.com"
 # Books and translated studies live on library.bloggoogan.com (owner decision, 4 Nov 2026).
 # Flip to True only after the library hostname is connected and verified: the encyclopedia then
 # drops them and 301-redirects their old URLs to the library.
-LIBRARY_LIVE = False or os.environ.get("LIBRARY_LIVE") == "1"
+LIBRARY_LIVE = True
 CONSULT, TRANSL = B.CONSULT, B.TRANSL
 LOGO = "https://googanconsult.com/storage/settings/site/Ulnh7JiOy6P65aUaaHTSjHZG2DXZMOXhuzG6UwvK.png"
 MONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
