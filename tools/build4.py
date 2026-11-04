@@ -874,7 +874,8 @@ def build(feed, dist):
     (dist / "404.html").write_text(page(f"الصفحة غير موجودة | {SHORT}", "الصفحة غير موجودة.", "/404", nf, noindex=True), encoding="utf-8")
 
     import books
-    book_urls = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT)
+    book_urls, book_redirects = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT, ver=V)
+    redirects = {**redirects, **book_redirects}
 
     # ---------------- search index, sitemap, robots, feed, headers, redirects
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
