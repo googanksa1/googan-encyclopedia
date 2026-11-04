@@ -26,7 +26,6 @@
 "/2025/09/blog-post_18.html",
 "/2025/09/blog-post_25.html",
 "/2025/09/blog-post_4.html",
-"/2025/09/blog-post.html",
 "/2025/06/blog-post_70.html",
 "/2025/06/blog-post_48.html",
 "/2025/06/blog-post_19.html",
@@ -208,7 +207,8 @@
 "/p/blog-page_25.html": "/2026/08/feasibility-study-office-riyadh.html",
 "/2025/06/blog-post_30.html": "/2026/08/feasibility-study-office-riyadh.html",
 "/2025/01/blog-post_22.html": "/2026/08/feasibility-study-office-riyadh.html",
-"/2011/05/blog-post.html": "/2026/08/certified-translation-riyadh.html"
+"/2011/05/blog-post.html": "/2026/08/certified-translation-riyadh.html",
+"/2025/09/blog-post.html": "/2025/06/blog-post_16.html"
 },
 "extra_reasons": {
 "/2012/08/blog-post_6729.html": "non-Arabic page",
