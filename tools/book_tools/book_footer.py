@@ -30,14 +30,18 @@ ap.add_argument("--bottom", type=float, default=6)
 a = ap.parse_args()
 
 arch = fitz.Archive(str(F))
-html = f'<p dir="rtl" style="text-align:center;font-size:6.3pt;color:#6b6b6b;margin:0;line-height:1.3">{a.text}</p>'
+
+def html_for(width):   # 6.3pt on an A5 page (419pt wide); smaller on pocket-size pages so it stays on one line
+    fs = max(4.2, min(6.3, 6.3 * (width - 48) / 371))
+    return f'<p dir="rtl" style="text-align:center;font-size:{fs:.1f}pt;color:#6b6b6b;margin:0;line-height:1.3;white-space:nowrap">{a.text}</p>'
+
 d = fitz.open(a.src)
 n = 0
 for i, p in enumerate(d):
     if i < a.skip_first:
         continue
     r = p.rect
-    rc = p.insert_htmlbox(fitz.Rect(24, r.height - a.bottom - 14, r.width - 24, r.height - a.bottom), html, css=CSS, archive=arch)
+    rc = p.insert_htmlbox(fitz.Rect(24, r.height - a.bottom - 14, r.width - 24, r.height - a.bottom), html_for(r.width), css=CSS, archive=arch)
     if rc[0] < 0:
         print("text did not fit on page", i + 1)
     n += 1

@@ -48,7 +48,7 @@ def _fix(seq):
             res[-1] += t; continue
         res.append(t)
     s = "".join(res)
-    s = re.sub(r"[٠-٩]+(?:[./:][٠-٩]+)*", lambda m: m.group(0)[::-1] if len(m.group(0)) > 1 else m.group(0), s)
+    s = re.sub(r"[٠-٩]+(?:[./:٫][٠-٩]+)*", lambda m: m.group(0)[::-1] if len(m.group(0)) > 1 else m.group(0), s)
     s = re.sub(r"[A-Za-z0-9][A-Za-z0-9 .,'&\-]*[A-Za-z0-9]", lambda m: m.group(0)[::-1], s)
     return s
 

@@ -3,7 +3,7 @@
 (function () {
   var root = document.querySelector("[data-reader]");
   if (!root || !window.St) return;
-  var N = +root.dataset.pages, dir = root.dataset.dir, key = "gr:" + root.dataset.slug;
+  var R = +root.dataset.ratio || 1.42, N = +root.dataset.pages, dir = root.dataset.dir, key = "gr:" + root.dataset.slug;
   var book = root.querySelector(".rd-book"), counter = root.querySelector("[data-count]");
   var toc = root.querySelector("[data-toc]"), snd = root.querySelector("[data-sound]");
   var pad = function (n) { return ("00" + n).slice(-3); };
@@ -19,7 +19,7 @@
   book.addEventListener("contextmenu", function (e) { e.preventDefault(); });
 
   var pf = new St.PageFlip(book, {
-    width: 420, height: 596, size: "stretch", minWidth: 260, maxWidth: 700, minHeight: 370, maxHeight: 1420,
+    width: 420, height: Math.round(420 * R), size: "stretch", minWidth: 260, maxWidth: 700, minHeight: Math.round(260 * R), maxHeight: Math.round(700 * R),
     showCover: true, usePortrait: true, mobileScrollSupport: true, maxShadowOpacity: 0.35, flippingTime: 650,
     drawShadow: true, showPageCorners: true
   });

@@ -7,7 +7,8 @@ about 50-80 KB a page). The PDF itself is never published.
 
 Cover: if PDF page 1 is a full cover spread (much wider than page 2, front + spine + back), it is
 split: the LEFT half becomes 001.webp (front cover, for an Arabic book) and the RIGHT half becomes
-the last image (back cover). Check 001.webp after running; if front and back are swapped, run
+the last image (back cover). Landscape or odd-size pages are centred on a white page of the
+book's main shape, so nothing is cut off in the reader. Check 001.webp after running; if front and back are swapped, run
 again with --swap-cover. If page 1 is a normal single page, pages are copied 1:1.
 
 Numbering rule used by the reader and by the contents file: image NNN = PDF page NNN
@@ -33,9 +34,19 @@ out.mkdir(parents=True)
 d = fitz.open(a.pdf)
 
 
+import collections
+PW, PH = collections.Counter((round(p.rect.width), round(p.rect.height)) for p in d).most_common(1)[0][0]
+TH = round(a.width * PH / PW)   # every image gets the book's main page shape, so the reader never crops
+
+
 def save(img, n):
     img = img.convert("RGB")
-    img = img.resize((a.width, round(img.height * a.width / img.width)), Image.LANCZOS)
+    sc = min(a.width / img.width, TH / img.height)
+    img = img.resize((round(img.width * sc), round(img.height * sc)), Image.LANCZOS)
+    if img.size != (a.width, TH):   # a landscape or odd-size page: centre it on a white page
+        canvas = Image.new("RGB", (a.width, TH), "white")
+        canvas.paste(img, ((a.width - img.width) // 2, (TH - img.height) // 2))
+        img = canvas
     img.save(out / f"{n:03d}.webp", "WEBP", quality=a.quality, method=6)
 
 
@@ -45,7 +56,7 @@ def render(i, dpi):
 
 
 w1, w2 = d[0].rect.width, d[1].rect.width
-dpi = round(a.width / (w2 / 72) * 1.05)
+dpi = round(a.width / (PW / 72) * 1.05)
 spread = w1 > 1.6 * w2
 if spread:
     im = render(0, dpi * 2)

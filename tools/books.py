@@ -59,6 +59,9 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         secs = json.load(open(HERE / "content" / "books" / bk["file"], encoding="utf-8"))
         imgs = HERE / "content" / "books" / f"{bk['slug']}-pages"
         npages = len(list(imgs.glob("*.webp")))
+        from PIL import Image
+        with Image.open(imgs / "002.webp") as im0:
+            ratio = round(im0.height / im0.width, 4)
         base = f"/books/{bk['slug']}/"
         read = base + "read/"
         shutil.copytree(imgs, root / bk["slug"] / "pages")
@@ -85,7 +88,7 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body, ld=ld, og_image=page.__globals__["SITE"] + base + "pages/001.webp"), encoding="utf-8")
         urls.append(base)
         opts = "".join(f'<option value="{s["page"]}">{esc(label(s))}</option>' for s in secs)
-        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-dir="{base}pages/" data-slug="{bk['slug']}">
+        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-ratio="{ratio}" style="--rd-ratio:{ratio}" data-dir="{base}pages/" data-slug="{bk['slug']}">
 <div class="rd-bar"><a class="rd-back" href="{base}">{esc(bk['title'])}</a>
 <label class="rd-toc"><span class="sr">انتقل إلى فصل</span><select data-toc><option value="">الفهرس</option>{opts}</select></label>
 <span class="rd-count" data-count aria-live="polite"></span>
