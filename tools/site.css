@@ -514,3 +514,4 @@ main{flex:1 0 auto}
 .bk-mini{aspect-ratio:3/4.2}
 .bk-mini img{object-fit:cover}
 @media (max-width:900px){.hero-books{height:280px;order:-1}.hero-books a{width:38%}}
+.dl-box{margin:1.4em 0;text-align:center}.dl-box .btn{font-size:1.05rem;padding:.8em 1.6em}
