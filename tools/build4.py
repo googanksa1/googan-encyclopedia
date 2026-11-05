@@ -897,6 +897,9 @@ def build(feed, dist):
         book_urls, book_redirects = books.build_books(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, transl=TRANSL, short=SHORT, ver=V)
         redirects = {**redirects, **book_redirects}
 
+    import courses
+    course_urls = courses.build_courses(dist, page=page, banner=banner, crumbs=crumbs, esc=esc, icon=icon, consult=CONSULT, short=SHORT, ver=V)
+
     # ---------------- search index, sitemap, robots, feed, headers, redirects
     norm_topic = {k: TOPICS[k][0] for k in TOPICS}
     json.dump([{"t": p["title"], "u": p["path"], "c": norm_topic[p["topic"]]} for p in keep], open(dist / "assets" / "search.json", "w"), ensure_ascii=False)
@@ -905,6 +908,7 @@ def build(feed, dist):
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u, _ in urls]
     sm += [f"<url><loc>{SITE}{p['path']}</loc><lastmod>{p['updated'][:10]}</lastmod></url>" for p in keep]
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in book_urls]
+    sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in course_urls]
     (dist / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
     (dist / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /_posts/\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])
