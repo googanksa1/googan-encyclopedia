@@ -517,7 +517,7 @@ main{flex:1 0 auto}
 .dl-box{margin:1.4em 0;text-align:center}.dl-box .btn{font-size:1.05rem;padding:.8em 1.6em}
 .cover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin:1.2em 0}.cover-grid figure{margin:0}.cover-grid img{width:100%;height:auto;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.12)}.cover-grid figcaption{font-size:.8rem;text-align:center;margin-top:6px;color:#555}
 /* training courses (/courses/) */
-.cr-facts{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 0;color:var(--muted,#555)}.cr-facts b{color:var(--ink,#1c1b42);font-size:1.25rem;margin-inline-end:4px}
+.cr-facts{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 0;color:rgba(255,255,255,.82)}.cr-facts b{color:#f2b630;font-size:1.35rem;margin-inline-end:5px}
 .cr-cat{border-top:4px solid var(--cr);padding-top:18px;margin-top:34px}
 .cr-cat h2{color:var(--cr)}
 .cr-grid{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px}

@@ -20,7 +20,7 @@ SHORT = "موسوعة جوجان"
 TAGLINE = "للأعمال والاستثمار والترجمة"
 STRIP = "مرجع عربي مجاني في الجدوى والاستثمار والترجمة المعتمدة"
 NAV = [("/topics/feasibility/", "دراسات الجدوى"), ("/topics/saudi-investment/", "الاستثمار في السعودية"), ("/topics/management/", "الإدارة"),
-       ("/topics/certified-translation/", "الترجمة المعتمدة"), ("/topics/", "كل المحاور"), ("/about/", "عن الموسوعة")]
+       ("/topics/certified-translation/", "الترجمة المعتمدة"), ("/courses/", "الدورات التدريبية"), ("/topics/", "كل المحاور"), ("/about/", "عن الموسوعة")]
 SEARCH_HOST = "bloggoogan.com"
 SEARCH_PH = "ابحث عن دليل…"
 SEARCH_LABEL = "الموسوعة"
