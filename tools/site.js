@@ -65,3 +65,15 @@
     document.querySelectorAll("details.toc[open]").forEach(function (d) { d.removeAttribute("open"); });
   }
 })();
+// Retry an image once if it fails to load (e.g. a slow first request), instead of leaving a blank box until refresh.
+(function () {
+  document.addEventListener("error", function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== "IMG" || img.dataset.retried) return;
+    img.dataset.retried = "1";
+    setTimeout(function () {
+      var s = img.getAttribute("src") || "";
+      img.src = s + (s.indexOf("?") < 0 ? "?" : "&") + "r=" + Date.now();
+    }, 900);
+  }, true);
+})();
