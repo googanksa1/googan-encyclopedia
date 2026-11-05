@@ -31,12 +31,30 @@ BOOKS = [{
 ]
 
 # Withdrawn at the owner's request (no publication approval). Their URLs answer 410 Gone.
+BOOKS += [
+    {"slug": "alternative-medicine-encyclopedia", "file": "alternative-medicine-encyclopedia.json", "category": "health", "type": "reference",
+     "title": "موسوعة الطب البديل والطب التكميلي: مختارات مترجمة من العبرية", "orig": "האנציקלופדיה לרפואה אלטרנטיבית ורפואה משלימה",
+     "orig_dir": "rtl", "orig_lang": "he", "authors": "", "authors_ar": "",
+     "desc": "مختارات مترجمة من العبرية إلى العربية من موسوعة في الطب البديل والتكميلي: نباتات وأعشاب طبية، وزهور باخ، والعلاج المثلي، والمساج، والشاكرا والريكي وغيرها. تُنشر للاطلاع والمعرفة فقط، ولا تغني عن استشارة الطبيب.",
+     "credit": "ترجمة من العبرية وتدقيق: شركة جوجان لخدمات الأعمال، وتُنشر بموافقة صاحب حق النشر",
+     "translator_line": "شركة جوجان لخدمات الأعمال (من العبرية إلى العربية)", "preview": [0, 1, 2], "page_labels": False, "cover_spread": False},
+    {"slug": "yusuf-estes-story-german", "file": "yusuf-estes-story-german.json", "category": "islam", "type": "gift",
+     "title": "قصة إسلام يوسف إستس، باللغة الألمانية", "orig": "Yusuf Estes, ehemaliger Christ und Bundesgefängnispfarrer", "orig_lang": "de",
+     "lang": "de", "ltr": True, "authors": "Yusuf Estes", "authors_ar": "يوسف إستس",
+     "desc": "قصة إسلام يوسف إستس، النصراني السابق وقسيس السجن الفيدرالي، بالألمانية في خمسة أجزاء، بترجمة الدكتور مولاي محمد غمبازة، الذي أهدى الكتاب إلى مكتبة جوجان مع الشكر له.",
+     "credit": "ترجمة الدكتور مولاي محمد غمبازة، وأهداه إلى مكتبة جوجان، فله منا جزيل الشكر على هذه الهدية الكريمة",
+     "translator_line": "الدكتور مولاي محمد غمبازة (إهداء من المترجم إلى المكتبة)", "translator_person": "Dr. Moulay Mohamed Ghembaza",
+     "credit_link": False, "preview": [], "page_labels": False, "cover_spread": False},
+]
+
 WITHDRAWN = ["advanced-curriculum-1", "advanced-curriculum-2", "advanced-curriculum-3", "advanced-curriculum-4", "advanced-curriculum-5",
              "anger-management-therapist", "anger-management-client", "anger-management-participant"]
 
 # Subject categories (shown as sections on /books/ and as their own pages /books/c/<key>/).
 # Add a new subject here, then give each book "category": "<key>" and a "type" from TYPES.
 CATEGORIES = {
+    "health": ("الصحة والطب البديل", "كتب مترجمة في الصحة والطب البديل والتكميلي، تُنشر للاطلاع والمعرفة ولا تغني عن استشارة الطبيب."),
+    "islam": ("التعريف بالإسلام", "كتب في التعريف بالإسلام بلغات مختلفة، منها كتب أهداها مترجموها إلى مكتبة جوجان."),
     "addiction": ("الإدمان والتعافي", "أدلة علاجية وكتيبات ومناهج تدريبية في علاج الإدمان والوقاية من الانتكاسة، للمعالجين والمرشدين والمتعافين وأسرهم."),
 }
 TYPES = {   # order = display order inside a category
@@ -44,6 +62,7 @@ TYPES = {   # order = display order inside a category
     "client": "كتيبات للمتعافين والمشاركين",
     "training": "مناهج تدريبية",
     "reference": "مراجع ومبادئ عامة",
+    "gift": "كتب مهداة إلى المكتبة",
 }
 BOOK_TYPE = {
     "staying-sober": "client", "relapse-prevention-workbook": "client", "matrix-client-handbook": "client",
@@ -140,7 +159,8 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         base = f"/books/{bk['slug']}/"
         read = base + "read/"
         shutil.copytree(imgs, root / bk["slug"] / "pages")
-        credit = f'<p class="bk-credit">{icon("book")}<span>{esc(bk["credit"])}. <a href="{transl}">googantranslation.com</a></span></p>'
+        clink = f' <a href="{transl}">googantranslation.com</a>' if bk.get("credit_link", True) else ""
+        credit = f'<p class="bk-credit">{icon("book")}<span>{esc(bk["credit"])}.{clink}</span></p>'
         toc_cards = "".join(
             f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}{"<small>صفحة " + str(s.get("printed", s["page"] - 1)) + "</small>" if bk.get("page_labels", True) else ""}</a></li>'
             for s in secs)
@@ -150,32 +170,32 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         preview = "".join(f'<section class="bk-pre"><h2>{esc(label(secs[i]))}</h2><div class="prose bk-text">{render(secs[i]["blocks"], esc, 900)}</div></section>' for i in pv)
         pre_html = (f"""<div class="wrap narrow bk-preview"><h2 class="bk-pre-h">من الصفحات الأولى</h2>{preview}
 <p class="bk-go"><a class="btn" href="{read}#p={secs[pv[-1] + 1]['page'] if pv[-1] + 1 < len(secs) else secs[-1]['page']}">أكمل القراءة في الكتاب</a></p>{credit}</div>""" if pv else "")
-        orig_row = f'<div><dt>العنوان الأصلي</dt><dd dir="ltr">{esc(bk["orig"])}</dd></div>' if bk.get("orig") else ""
+        orig_row = f'<div><dt>العنوان الأصلي</dt><dd dir="{bk.get('orig_dir', 'ltr')}">{esc(bk["orig"])}</dd></div>' if bk.get("orig") else ""
         who = " ".join(x for x in (esc(bk.get("authors_ar", "")), f'<span dir="ltr">({esc(bk["authors"])})</span>' if bk.get("authors") else "") if x)
         who_row = f'<div><dt>{"المؤلفان" if bk.get("page_labels", True) else "التأليف"}</dt><dd>{who}</dd></div>' if who else ""
-        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
+        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>{esc(bk.get("translator_line", "شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم"))}</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
         body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (CATEGORIES[bk["category"]][0], f"/books/c/{bk['category']}/"), (bk["title"], None)])) + f"""
 <div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف كتاب {esc(bk['title'])}" width="420" height="625"></a>
 <div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a></p>{credit}</div></div>
 <div class="wrap bk-contents"><h2>فهرس الكتاب</h2><p class="bk-hint">اختر فصلاً ليُفتح الكتاب على صفحته مباشرة.</p><ol class="bk-chs">{toc_cards}</ol></div>
 {pre_html}"""
         (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
-        ld = [{"@context": "https://schema.org", "@type": "Book", "name": bk["title"], "inLanguage": "ar", "numberOfPages": npg,
-               "author": [{"@type": "Person", "name": n.strip()} for n in bk["authors"].split("&")],
-               "translator": {"@type": "Organization", "name": "شركة جوجان لخدمات الأعمال"}, "workTranslation": None,
-               "translationOfWork": {"@type": "Book", "name": bk["orig"], "inLanguage": "en"}, "url": page.__globals__["SITE"] + base,
+        ld = [{"@context": "https://schema.org", "@type": "Book", "name": bk["title"], "inLanguage": bk.get("lang", "ar"), "numberOfPages": npg,
+               "author": [{"@type": "Person", "name": n.strip()} for n in bk["authors"].split("&") if n.strip()],
+               "translator": ({"@type": "Person", "name": bk["translator_person"]} if bk.get("translator_person") else {"@type": "Organization", "name": "شركة جوجان لخدمات الأعمال"}), "workTranslation": None,
+               "translationOfWork": {"@type": "Book", "name": bk["orig"], "inLanguage": bk.get("orig_lang", "en")}, "url": page.__globals__["SITE"] + base,
                "image": page.__globals__["SITE"] + base + "pages/001.webp"}]
         ld[0].pop("workTranslation")
         (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body, ld=ld, og_image=page.__globals__["SITE"] + base + "pages/001.webp"), encoding="utf-8")
         urls.append(base)
         opts = "".join(f'<option value="{s["page"]}">{esc(label(s))}</option>' for s in secs)
-        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-ratio="{ratio}" data-spread="{1 if spread else 0}" style="--rd-ratio:{ratio}" data-dir="{base}pages/" data-slug="{bk['slug']}">
+        rbody = f"""<div class="rd" data-reader data-pages="{npages}" data-ratio="{ratio}" data-spread="{1 if spread else 0}" style="--rd-ratio:{ratio}" data-dir="{base}pages/" data-slug="{bk['slug']}"{' data-ltr="1"' if bk.get("ltr") else ""}>
 <div class="rd-bar"><a class="rd-back" href="{base}">{esc(bk['title'])}</a>
 <label class="rd-toc"><span class="sr">انتقل إلى فصل</span><select data-toc><option value="">الفهرس</option>{opts}</select></label>
 <span class="rd-count" data-count aria-live="polite"></span>
 <span class="rd-tools"><button type="button" data-zoom title="تكبير الصفحة">تكبير</button><button type="button" data-sound aria-pressed="true">الصوت</button><button type="button" data-fs title="ملء الشاشة">ملء الشاشة</button></span></div>
 <div class="rd-stage"><button class="rd-nav rd-prev" type="button" data-prev aria-label="الصفحة السابقة">›</button><div class="rd-wrap"><div class="rd-book"></div></div><button class="rd-nav rd-next" type="button" data-next aria-label="الصفحة التالية">‹</button></div>
-<p class="rd-credit">{esc(bk['credit'])}. <a href="{transl}">googantranslation.com</a></p>
+<p class="rd-credit">{esc(bk['credit'])}.{clink}</p>
 <div class="rd-zoom" hidden tabindex="-1" role="dialog" aria-label="الصفحة مكبرة"><button type="button" data-close>إغلاق</button><div class="rd-zoom-in"></div></div>
 </div>
 <script src="/assets/page-flip.js?v={ver}" defer></script><script src="/assets/reader.js?v={ver}" defer></script>"""

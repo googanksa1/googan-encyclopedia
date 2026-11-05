@@ -7,7 +7,8 @@
   var book = root.querySelector(".rd-book"), counter = root.querySelector("[data-count]");
   var toc = root.querySelector("[data-toc]"), snd = root.querySelector("[data-sound]");
   var pad = function (n) { return ("00" + n).slice(-3); };
-  var kOf = function (pos) { return N - pos; }, posOf = function (k) { return N - k; };
+  var LTR = root.dataset.ltr === "1";   // left-to-right books (e.g. German) are fed in natural order
+  var kOf = function (pos) { return LTR ? pos + 1 : N - pos; }, posOf = function (k) { return LTR ? k - 1 : N - k; };
 
   for (var pos = 0; pos < N; pos++) {
     var k = kOf(pos), d = document.createElement("div");
@@ -82,14 +83,14 @@
   pf.turnToPage(posOf(start));
   update();
 
-  function next() { pf.flipPrev("bottom"); }
-  function prev() { pf.flipNext("bottom"); }
+  function next() { LTR ? pf.flipNext("bottom") : pf.flipPrev("bottom"); }
+  function prev() { LTR ? pf.flipPrev("bottom") : pf.flipNext("bottom"); }
   root.querySelector("[data-next]").addEventListener("click", next);
   root.querySelector("[data-prev]").addEventListener("click", prev);
   document.addEventListener("keydown", function (e) {
     if (e.target.tagName === "SELECT") return;
-    if (e.key === "ArrowLeft") { e.preventDefault(); next(); }
-    if (e.key === "ArrowRight") { e.preventDefault(); prev(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); LTR ? prev() : next(); }
+    if (e.key === "ArrowRight") { e.preventDefault(); LTR ? next() : prev(); }
   });
   if (toc) toc.addEventListener("change", function () { if (toc.value) { var p = posOf(+toc.value); load(p); pf.turnToPage(p); update(); } });
   window.addEventListener("hashchange", function () { var m = location.hash.match(/p=(\d+)/); if (m) { var p = posOf(+m[1]); load(p); pf.turnToPage(p); update(); } });
@@ -103,6 +104,7 @@
   root.querySelector("[data-zoom]").addEventListener("click", function () {
     var pos = current(), ks = [kOf(pos)];
     if (pf.getOrientation() === "landscape" && pos > 0 && pos < N - 1) ks = [kOf(pos + 1), kOf(pos)].sort(function (a, b) { return a - b; });
+    if (LTR && pf.getOrientation() === "landscape" && pos > 0 && pos < N - 1) ks = [kOf(pos - 1 + (pos % 2)), kOf(pos + (pos % 2))].sort(function (a, b) { return a - b; });
     zin.innerHTML = ks.map(function (k) { return '<img alt="" draggable="false" src="' + dir + pad(k) + '.webp">'; }).join("");
     zoom.hidden = false; zoom.focus();
   });
