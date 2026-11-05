@@ -33,8 +33,8 @@ def load():
     return out
 
 
-def card(c, esc):
-    return (f'<li><a class="cr-card" href="/courses/{c["slug"]}/"><img src="/courses/{c["slug"]}/pages/001.webp" alt="" loading="lazy" width="210" height="297">'
+def card(c, esc, ver=""):
+    return (f'<li><a class="cr-card" href="/courses/{c["slug"]}/"><img src="/courses/{c["slug"]}/pages/001.webp?v={ver}" alt="" loading="lazy" width="210" height="297">'
             f'<span class="cr-meta"><strong>{esc(c["title"])}</strong><small>{c["pages"]} صفحة · نحو {c["minutes"]} دقيقة قراءة</small></span></a></li>')
 
 
@@ -72,7 +72,7 @@ def build_courses(dist, *, page, banner, crumbs, esc, icon, consult, short, ver)
                 f'<div><dt>عدد الصفحات</dt><dd>{c["pages"]} صفحة</dd></div><div><dt>مدة القراءة</dt><dd>نحو {c["minutes"]} دقيقة</dd></div>'
                 f'<div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>')
         body = banner(esc(c["title"]), esc(c["subtitle"]), crumbs([home, ("الدورات التدريبية", "/courses/"), (c["title"], None)])) + f"""
-<div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف {esc(c['title'])}" width="420" height="594" fetchpriority="high"></a>
+<div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp?v={ver}" alt="غلاف {esc(c['title'])}" width="420" height="594" fetchpriority="high"></a>
 <div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}ابدأ قراءة الدورة</a></p>
 <p class="bk-credit">{icon('book')}<span>دورة من إعداد شركة جوجان لخدمات الأعمال. للتدريب والاستشارات الإدارية: <a href="{consult}">googanconsult.com</a></span></p></div></div>
 <div class="wrap narrow prose cr-body"><h2>عن الدورة</h2>{intro}
@@ -102,7 +102,7 @@ def build_courses(dist, *, page, banner, crumbs, esc, icon, consult, short, ver)
     chips = "".join(f'<a class="bk-chip" href="#c-{k}">{v[0]} <span>{sum(1 for c in courses if c["category"] == k)}</span></a>' for k, v in CATS.items() if any(c["category"] == k for c in courses))
     secs = "".join(
         f'<section class="bk-cat cr-cat" id="c-{k}" style="--cr:{v[2]}"><div class="sec-head"><h2>{v[0]} <span class="bk-count">{sum(1 for c in courses if c["category"] == k)} دورة</span></h2></div><p class="bk-hint">{v[1]}</p>'
-        f'<ul class="cr-grid">{"".join(card(c, esc) for c in courses if c["category"] == k)}</ul></section>'
+        f'<ul class="cr-grid">{"".join(card(c, esc, ver) for c in courses if c["category"] == k)}</ul></section>'
         for k, v in CATS.items() if any(c["category"] == k for c in courses))
     total_pages = sum(c["pages"] for c in courses)
     body = banner("الدورات التدريبية", f"{len(courses)} دورة تدريبية قدّمتها شركة جوجان في مسيرتها في الاستشارات الإدارية، تُقرأ كاملة ومجاناً بتقليب الصفحات.",
