@@ -147,6 +147,9 @@ def take_photo(topic):
 
 
 def purl(pid, w, h):
+    # Local photos (our own work, e.g. "/media/waraq-altoot/hero") live in content/media as <name>.webp and <name>-600.webp.
+    if pid.startswith("/"):
+        return f"{SITE}{pid}{'-600' if w <= 600 else ''}.webp"
     return f"https://images.unsplash.com/photo-{pid}?auto=format&fit=crop&w={w}&h={h}&q=70"
 
 
@@ -694,6 +697,8 @@ def build(feed, dist):
     (dist / "assets").mkdir(parents=True)
     for f in ("site.css", "site.js", "mark.svg"):
         shutil.copy(HERE / f, dist / "assets" / f)
+    if (CONTENT / "media").exists():
+        shutil.copytree(CONTENT / "media", dist / "media")
     snap_file = CONTENT / "legacy.json"
     if feed == "--snapshot":
         snap = json.load(open(snap_file))
