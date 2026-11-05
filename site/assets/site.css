@@ -515,3 +515,4 @@ main{flex:1 0 auto}
 .bk-mini img{object-fit:cover}
 @media (max-width:900px){.hero-books{height:280px;order:-1}.hero-books a{width:38%}}
 .dl-box{margin:1.4em 0;text-align:center}.dl-box .btn{font-size:1.05rem;padding:.8em 1.6em}
+.cover-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin:1.2em 0}.cover-grid figure{margin:0}.cover-grid img{width:100%;height:auto;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.12)}.cover-grid figcaption{font-size:.8rem;text-align:center;margin-top:6px;color:#555}

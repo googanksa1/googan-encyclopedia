@@ -4,6 +4,7 @@ seo: ترجمة المجلات إلى الإنجليزية والفرنسية: �
 slug: magazine-translation-english-french
 topic: languages
 date: 2026-11-05 11:00
+photo: /media/hrc/rights-3-2014
 description: كيف تترجم جهة حكومية أو مؤسسة مجلتها وإصداراتها الدورية من العربية إلى الإنجليزية والفرنسية باحتراف: المصطلحات، وأسماء الأعلام، وتمدد النص، والإخراج من اليمين إلى اليسار، والمراجعة، مع تجربة جوجان في ترجمة مجلات هيئة حقوق الإنسان.
 ---
 
@@ -20,6 +21,10 @@ description: كيف تترجم جهة حكومية أو مؤسسة مجلتها 
 | حقوق (Rights) | الإنجليزية | من العدد الثالث (مارس وأبريل 2014) إلى العدد الثامن (مارس وأبريل 2015) |
 | حقوق (Houqouq) | الفرنسية | العدد الرابع (يناير 2015) |
 | بشر (Basharr) | الإنجليزية | العدد الأول (يناير 2015)، وهي مجلة فصلية متخصصة في مكافحة الاتجار بالأشخاص |
+
+أغلفة من الأعداد التي ترجمها فريق جوجان:
+
+<div class="cover-grid"><figure><img src="/media/hrc/rights-3-2014-600.webp" alt="غلاف مجلة Rights، العدد الثالث، مارس وأبريل 2014" width="600" height="848"><figcaption>Rights، العدد الثالث، مارس وأبريل 2014</figcaption></figure><figure><img src="/media/hrc/rights-4-2014-600.webp" alt="غلاف مجلة Rights، العدد الرابع، مايو ويونيو 2014" width="600" height="848"><figcaption>Rights، العدد الرابع، مايو ويونيو 2014</figcaption></figure><figure><img src="/media/hrc/rights-5-2014-600.webp" alt="غلاف مجلة Rights، العدد الخامس، يوليو وأغسطس 2014" width="600" height="848"><figcaption>Rights، العدد الخامس، يوليو وأغسطس 2014</figcaption></figure><figure><img src="/media/hrc/rights-6-2014-600.webp" alt="غلاف مجلة Rights، العدد السادس، نوفمبر وديسمبر 2014" width="600" height="848"><figcaption>Rights، العدد السادس، نوفمبر وديسمبر 2014</figcaption></figure><figure><img src="/media/hrc/rights-7-2015-600.webp" alt="غلاف مجلة Rights، العدد السابع، يناير وفبراير 2015" width="600" height="848"><figcaption>Rights، العدد السابع، يناير وفبراير 2015</figcaption></figure><figure><img src="/media/hrc/rights-8-2015-600.webp" alt="غلاف مجلة Rights، العدد الثامن، مارس وأبريل 2015" width="600" height="848"><figcaption>Rights، العدد الثامن، مارس وأبريل 2015</figcaption></figure><figure><img src="/media/hrc/houqouq-4-2015-600.webp" alt="غلاف مجلة Houqouq بالفرنسية، العدد الرابع، يناير 2015" width="600" height="848"><figcaption>Houqouq بالفرنسية، العدد الرابع، يناير 2015</figcaption></figure><figure><img src="/media/hrc/basharr-1-2015-600.webp" alt="غلاف مجلة Basharr بالإنجليزية، العدد الأول، يناير 2015" width="600" height="848"><figcaption>Basharr بالإنجليزية، العدد الأول، يناير 2015</figcaption></figure></div>
 
 تناولت هذه الأعداد موضوعات مثل علاقة المملكة بالأمم المتحدة ومجلس حقوق الإنسان، وتطوير القضاء، ومكافحة الإرهاب والاتجار بالأشخاص، وحقوق الأشخاص ذوي الإعاقة. وهي موضوعات تتطلب دقة عالية في المصطلح الحقوقي والقانوني والدبلوماسي.
 
