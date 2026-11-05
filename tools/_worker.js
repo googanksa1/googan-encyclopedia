@@ -82,6 +82,8 @@ async function library(request, env, url, path) {
   let r = await fetchAsset("/_library" + path);
   if (r.status === 404 && path.startsWith("/assets/")) return env.ASSETS.fetch(request);
   // Pages normalises /x/index.html -> /x/ with a redirect; strip our internal prefix from it.
+  // 304 Not Modified (browser revalidating a cached file) is not a redirect: pass it through.
+  if (r.status === 304) return new Response(null, { status: 304, headers: r.headers });
   if (r.status >= 300 && r.status < 400) {
     const loc = r.headers.get("location") || "/";
     const dest = new URL(loc, url.origin);
