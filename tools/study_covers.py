@@ -62,6 +62,12 @@ FIELD_OF = {
     "corrective-feedback-learner-uptake": "language", "recasts-tense-consistency": "language",
     "sentence-combining-writing-instruction": "language", "cover-copy-compare-spelling": "language",
     # management / economics / society
+    # batch 2026-11-05 (May studies)
+    "sme-planning-performance-japan": "management", "first-to-market-first-to-fail": "management",
+    "handicapped-college-students-russia": "special-ed", "early-intervention-program-taitung-taiwan": "special-ed",
+    "cec-early-intervention-professional-standards": "special-ed", "aba-reversal-design-abab": "autism",
+    "early-intervention-five-countries-comparison": "special-ed", "online-courses-deaf-hard-of-hearing-learners": "deaf",
+    "towards-theory-of-mobile-learning": "elearning", "trade-openness-fdi-child-labor": "management",
     # finance / accounting (original Arabic research)
     "external-auditor-financial-analysis-early-warning": "finance",
     "organizational-politics-public-sector": "management", "community-college-leadership-competencies": "management",
