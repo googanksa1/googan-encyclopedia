@@ -23,6 +23,8 @@ FIELDS = {
                  "M3.5 4.5h11v8h-7l-4 3zM10.5 15.5h5.5l4 3v-8.5h-3"),
     "management": ("الإدارة والاقتصاد والمجتمع", "الإدارة العامة والقيادة والإيرادات الضريبية والجريمة المنظمة.", "#3f4a63",
                    "M4 20V11M9.5 20V5M15 20v-7M20.5 20v-11M3 20.5h19"),
+    "finance": ("المحاسبة والتحليل المالي", "المراجعة والتحليل المالي والتنبؤ بتعثر الشركات.", "#2c6e49",
+                "M4 19.5h16M6.5 16V11M10.5 16V7.5M14.5 16v-5.5M18.5 16V5M5.5 9.5l4-3 4 3 5-5"),
     "general": ("دراسات متنوعة", "دراسات مترجمة في موضوعات أخرى.", "#1c1b42", "M5 4.5h10l4 4v11H5zM15 4.5v4h4M8 12h8M8 15.5h8"),
 }
 
@@ -60,6 +62,8 @@ FIELD_OF = {
     "corrective-feedback-learner-uptake": "language", "recasts-tense-consistency": "language",
     "sentence-combining-writing-instruction": "language", "cover-copy-compare-spelling": "language",
     # management / economics / society
+    # finance / accounting (original Arabic research)
+    "external-auditor-financial-analysis-early-warning": "finance",
     "organizational-politics-public-sector": "management", "community-college-leadership-competencies": "management",
     "organized-crime-local-businesses": "management", "tax-revenue-effort-developing-countries": "management",
 }
@@ -84,7 +88,7 @@ def cover_svg(p, w=600, h=375, label=True):
     _n[0] += 1
     gid = f"g{_n[0]}"
     yr = year_of(p)
-    full = "دراسة مترجمة" if "ترجمة كاملة" in p.get("body", "")[:4000] else "قراءة عربية"
+    full = "بحث عربي" if p.get("kind") == "arabic" else ("دراسة مترجمة" if "ترجمة كاملة" in p.get("body", "")[:4000] else "قراءة عربية")
     sub = f"{full} · {yr}" if yr else full
     txt = (f'<text x="{w - 34}" y="{h - 78}" fill="#fff" font-family="Cairo, sans-serif" font-weight="800" font-size="30" text-anchor="start" direction="rtl">{escape(name)}</text>'
            f'<text x="{w - 34}" y="{h - 40}" fill="#fff" fill-opacity=".82" font-family="Cairo, sans-serif" font-weight="600" font-size="20" text-anchor="start" direction="rtl">{escape(sub)}</text>') if label else ""

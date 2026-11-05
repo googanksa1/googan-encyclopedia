@@ -679,10 +679,12 @@ def load_new_posts(redirects, library=False):
         iso = when.isoformat()
         p = {"path": path, "type": "POST", "slug": slug, "old_path": f"/{when:%Y}/{when:%m}/{slug}.html", "title": meta["title"], "topic": topic, "published": iso,
              "updated": meta.get("updated", iso), "lead": lead, "toc_items": toc_items,
-             "body": html_body if meta.get("city") else insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")),
+             "body": html_body if meta.get("city") else insert_mid_cta(html_body, cta(meta.get("cta") or TOPICS[topic][2], "inline")),
              "desc": meta.get("description") or desc_of(lead, html_body)}
         p["mins"], p["words"] = G.reading_minutes(lead + html_body)
         p["photo"] = meta.get("photo") or take_photo(topic)
+        # Library extras: kind ("arabic" = original Arabic research, not a translation), credit line, author name.
+        p["kind"], p["credit"], p["author"] = meta.get("kind", ""), meta.get("credit", ""), meta.get("author", "")
         if meta.get("seo"):
             p["seo_title"] = meta["seo"]
         redirects.pop(path, None)

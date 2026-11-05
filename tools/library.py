@@ -73,14 +73,14 @@ def _build(dist, M):
         body = f"""<section class="banner pb bk-banner"><div class="wrap">{crumbs(cr)}<h1>{esc(p['title'])}</h1>
 <p class="sub"><a class="st-badge" href="/studies/f/{SC.field(p)}/">{SC.field_icon(SC.field(p), 18)}{SC.FIELDS[SC.field(p)][0]}</a> {icon('cal')}نُشر <time datetime="{iso_pub}">{d_pub}</time> · {p['mins']} دقيقة قراءة</p></div></section>
 <div class="wrap art-grid bk-grid"><article class="art-main"><figure class="art-hero st-hero">{SC.cover_svg(p)}</figure>{lead}{toc}<div class="prose">{p['body']}</div>
-{credit_line}
+{(f'<p class="bk-credit">{icon("book")}{esc(p["credit"])}</p>' if p.get("credit") else credit_line)}
 <p class="disclaimer">{icon('book')}المحتوى للاطلاع العلمي العام، والمرجع النهائي هو نص الدراسة الأصلية المذكورة في أعلى الصفحة.</p></article>
 <aside class="art-side"><div class="side-box"><h2>من المجال نفسه</h2><ul class="minis">{''.join(s_mini(q) for q in others)}</ul><p><a href="/studies/f/{SC.field(p)}/">كل دراسات {SC.FIELDS[SC.field(p)][0]}</a></p></div></aside></div>"""
         url = SITE + p["path"]
         ld = [{"@context": "https://schema.org", "@graph": [org,
                {"@type": "Article", "@id": url + "#article", "headline": p["title"][:110], "description": p["desc"], "datePublished": p["published"],
                 "dateModified": p["updated"], "inLanguage": "ar", "mainEntityOfPage": url, "wordCount": p["words"],
-                "author": {"@id": SITE + "/#org"}, "publisher": {"@id": SITE + "/#org"}},
+                "author": ({"@type": "Person", "name": p["author"]} if p.get("author") else {"@id": SITE + "/#org"}), "publisher": {"@id": SITE + "/#org"}},
                {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + (u or p["path"])} for i, (n, u) in enumerate(cr)]}]}]
         d = out / "studies" / p["slug"]
         d.mkdir(parents=True, exist_ok=True)
