@@ -104,7 +104,7 @@ def _build(dist, M):
         b = banner(nm, f"{intro} {len(by_field[k])} دراسة.", crumbs([home_c, ("الدراسات المترجمة", "/studies/"), (nm, None)]), pc="pb") + \
             f'<div class="wrap"><nav class="bk-chips" aria-label="مجالات الدراسات">{chips}</nav><div class="tiles st-grid">{"".join(s_tile(p) for p in by_field[k])}</div></div>'
         (out / "studies" / "f" / k).mkdir(parents=True, exist_ok=True)
-        (out / "studies" / "f" / k / "index.html").write_text(page(f"{nm}: دراسات مترجمة | {NAME}", intro, f"/studies/f/{k}/", b), encoding="utf-8")
+        (out / "studies" / "f" / k / "index.html").write_text(page(f"{nm}: دراسات وملخصات | {NAME}", intro, f"/studies/f/{k}/", b), encoding="utf-8")
         field_urls.append(f"/studies/f/{k}/")
 
     # ---------------- books
