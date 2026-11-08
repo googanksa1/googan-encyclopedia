@@ -23,8 +23,16 @@ FIELDS = {
                  "M3.5 4.5h11v8h-7l-4 3zM10.5 15.5h5.5l4 3v-8.5h-3"),
     "management": ("الإدارة والاقتصاد والمجتمع", "الإدارة العامة والقيادة والإيرادات الضريبية والجريمة المنظمة.", "#3f4a63",
                    "M4 20V11M9.5 20V5M15 20v-7M20.5 20v-11M3 20.5h19"),
-    "finance": ("المحاسبة والتحليل المالي", "المراجعة والتحليل المالي والتنبؤ بتعثر الشركات.", "#2c6e49",
+    "finance": ("المحاسبة والتحليل المالي", "المراجعة والتدقيق الداخلي والإفصاح المحاسبي والتحليل المالي والتنبؤ بتعثر الشركات.", "#2c6e49",
                 "M4 19.5h16M6.5 16V11M10.5 16V7.5M14.5 16v-5.5M18.5 16V5M5.5 9.5l4-3 4 3 5-5"),
+    "hr": ("الموارد البشرية والقيادة", "ملخصات رسائل ودراسات في القيادة والتدريب والتوطين وضغوط العمل والثقافة التنظيمية.", "#5b3a8c",
+           "M8.5 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20v-2.5A4.5 4.5 0 0 1 7.5 13h2A4.5 4.5 0 0 1 14 17.5V20M16.5 10.5a2.5 2.5 0 1 0 0-5M18 13.2a4 4 0 0 1 3 3.8V20"),
+    "marketing": ("التسويق", "ملخصات دراسات في التسويق الإلكتروني والإعلان والمنافسة وسلوك المستهلك السعودي.", "#8a2d3b",
+                  "M3.5 10v4l11 4.5V5.5zM14.5 8.5h2a3 3 0 0 1 0 6h-2M6.5 14.5l1.5 5h3l-1.2-4"),
+    "banking": ("المصارف والأسواق المالية", "ملخصات دراسات في المصارف الإسلامية وسوق الأسهم السعودية والاستثمار.", "#1f4e79",
+                "M3 9.5 12 4l9 5.5M5 10v7M9.5 10v7M14.5 10v7M19 10v7M3 20h18"),
+    "economics": ("الاقتصاد والقطاعات", "ملخصات دراسات اقتصادية وقطاعية: الألبان، والزيتون، وعمل المرأة في اقتصاد الأسرة.", "#a0591b",
+                  "M12 3v18M16.5 6.5c-1-1.3-2.6-2-4.5-2-2.5 0-4.5 1.4-4.5 3.4 0 4.6 9.4 2.6 9.4 7.4 0 2-2.1 3.5-4.9 3.5-2 0-3.8-.8-4.8-2.2"),
     "general": ("دراسات متنوعة", "دراسات مترجمة في موضوعات أخرى.", "#1c1b42", "M5 4.5h10l4 4v11H5zM15 4.5v4h4M8 12h8M8 15.5h8"),
 }
 
@@ -72,6 +80,15 @@ FIELD_OF = {
     "external-auditor-financial-analysis-early-warning": "finance",
     "organizational-politics-public-sector": "management", "community-college-leadership-competencies": "management",
     "organized-crime-local-businesses": "management", "tax-revenue-effort-developing-countries": "management",
+    # summaries batch 2026-11-08 (theses & studies, management/economics)
+    "leadership-styles-makkah-emirate": "hr", "saudization-official-procedures": "hr", "air-traffic-controllers-work-stress": "hr",
+    "leadership-styles-public-sector-phd": "hr", "employee-training-benefit": "hr", "org-culture-hr-development-tvtc": "hr",
+    "emarketing-saudi-commercial-banks": "marketing", "advertising-saudi-consumer": "marketing", "competition-marketing-industrial": "marketing",
+    "mobile-marketing-saudi": "marketing", "value-chain-knowledge-management": "management", "business-incubation-saudi": "management",
+    "internal-audit-cash-inventory": "finance", "auditing-ethics": "finance", "financial-ratios-failure-prediction": "finance",
+    "analytical-accounting-decision-support-phd": "finance", "accounting-policies-disclosure": "finance", "financial-evaluation-sofact-algeria": "finance",
+    "islamic-banks-globalization": "banking", "saudi-women-stock-investment": "banking", "saudi-stock-market-variables": "banking",
+    "women-work-saudi-family-economy": "economics", "dairy-industry-saudi": "economics", "olive-sector-arab-world": "economics",
 }
 
 
@@ -94,7 +111,7 @@ def cover_svg(p, w=600, h=375, label=True):
     _n[0] += 1
     gid = f"g{_n[0]}"
     yr = year_of(p)
-    full = "بحث عربي" if p.get("kind") == "arabic" else ("دراسة مترجمة" if "ترجمة كاملة" in p.get("body", "")[:4000] else "قراءة عربية")
+    full = "بحث عربي" if p.get("kind") == "arabic" else "ملخص دراسة" if p.get("kind") == "summary" else ("دراسة مترجمة" if "ترجمة كاملة" in p.get("body", "")[:4000] else "قراءة عربية")
     sub = f"{full} · {yr}" if yr else full
     txt = (f'<text x="{w - 34}" y="{h - 78}" fill="#fff" font-family="Cairo, sans-serif" font-weight="800" font-size="30" text-anchor="start" direction="rtl">{escape(name)}</text>'
            f'<text x="{w - 34}" y="{h - 40}" fill="#fff" fill-opacity=".82" font-family="Cairo, sans-serif" font-weight="600" font-size="20" text-anchor="start" direction="rtl">{escape(sub)}</text>') if label else ""
