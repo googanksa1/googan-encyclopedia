@@ -89,6 +89,7 @@ FIELD_OF = {
     "analytical-accounting-decision-support-phd": "finance", "accounting-policies-disclosure": "finance", "financial-evaluation-sofact-algeria": "finance",
     "islamic-banks-globalization": "banking", "saudi-women-stock-investment": "banking", "saudi-stock-market-variables": "banking",
     "women-work-saudi-family-economy": "economics", "dairy-industry-saudi": "economics", "olive-sector-arab-world": "economics",
+    "healthcare-service-quality-cardiac-center": "management", "school-principals-training-program-phd": "hr",
 }
 
 
