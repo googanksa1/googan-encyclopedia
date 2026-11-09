@@ -578,6 +578,11 @@ def prepare_legacy(feed):
         elif dup_from and p["words"] < 350:
             target = dup_from.most_common(1)[0][0]
             keep.remove(p); redirects[p["path"]] = target; extra[p["path"]] = "duplicate"
+    # One Blogger post was published with a slug that already ended in ".html", so its URL ended ".html.html".
+    # Serve it at the clean ".html" URL and 301 the doubled one; links to it are rewritten in pass 2.
+    for p in keep:
+        if p["path"].endswith(".html.html"):
+            old = p["path"]; p["path"] = old[:-5]; redirects[old] = p["path"]
     redirects = {k: (redirects.get(v, v)) for k, v in redirects.items()}
     keep.sort(key=lambda x: x["published"], reverse=True)
     known = {p["path"] for p in keep}
@@ -708,6 +713,13 @@ def build(feed, dist):
         for p in keep:
             p["toc_items"] = [tuple(x) for x in p["toc_items"]]
             USED.add(p["photo"])
+        # clean ".html.html" URLs from the snapshot too (see prepare_legacy), and fix links that point to them
+        moved = {p["path"]: p["path"][:-5] for p in keep if p["path"].endswith(".html.html")}
+        for p in keep:
+            p["path"] = moved.get(p["path"], p["path"])
+            for o, n in moved.items():
+                p["body"] = p["body"].replace(f'href="{o}', f'href="{n}').replace(f'href="https://www.bloggoogan.com{o}', f'href="{n}')
+        redirects.update(moved)
     else:
         keep, redirects, extra = prepare_legacy(feed)
         CONTENT.mkdir(exist_ok=True)
