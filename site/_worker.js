@@ -79,6 +79,11 @@ async function library(request, env, url, path) {
   }
   const to = LIB_REDIRECTS[path];
   if (to) return Response.redirect(new URL(to, url.origin).toString(), 301);
+  // Search Console verification files: Pages strips ".html" with a redirect, but Google needs a direct 200.
+  if (/^\/google[0-9a-f]+\.html$/.test(path)) {
+    const v = await fetchAsset("/_library" + path.slice(0, -5));
+    if (v.status === 200) return send(v, 200, { "content-type": "text/html; charset=utf-8" });
+  }
   let r = await fetchAsset("/_library" + path);
   if (r.status === 404 && path.startsWith("/assets/")) return env.ASSETS.fetch(request);
   // Pages normalises /x/index.html -> /x/ with a redirect; strip our internal prefix from it.

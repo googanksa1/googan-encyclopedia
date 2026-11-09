@@ -168,6 +168,8 @@ def _build(dist, M):
     upd = {p["path"]: p["updated"][:10] for p in studies}
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{upd.get(u, today)}</lastmod></url>" for u in urls]
     (out / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
+    # Google Search Console ownership file for library.bloggoogan.com (keep: Google re-checks it)
+    (out / "google575367f51c780846.html").write_text("google-site-verification: google575367f51c780846.html", encoding="utf-8")
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in studies[:30])
     (out / "feed.xml").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{studies[0]["updated"] if studies else today}</updated>{fi}</feed>', encoding="utf-8")
