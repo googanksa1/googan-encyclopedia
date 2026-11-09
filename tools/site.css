@@ -530,3 +530,7 @@ main{flex:1 0 auto}
 .cr-upd{border-inline-start:5px solid #f2b705;background:#fff8e1;border-radius:10px;padding:14px 20px;margin:22px 0}
 .cr-upd h2{font-size:1.15rem;margin:0 0 4px}.cr-upd li{margin:6px 0}.cr-upd a{font-size:.85em}
 @media (max-width:700px){.cr-two{grid-template-columns:1fr}.cr-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+.vid{margin:1.5em 0}.vid video{display:block;width:100%;border-radius:12px;background:#000}
+.vid-tall{display:none;max-width:420px;margin-inline:auto}
+@media (max-width:640px){.vid-wide{display:none}.vid-tall{display:block}}
+.vid figcaption{font-size:.9rem;color:var(--muted,#666);margin-top:.5em}
