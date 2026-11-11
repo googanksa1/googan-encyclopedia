@@ -67,7 +67,10 @@ def build_courses(dist, *, page, banner, crumbs, esc, icon, consult, short, ver)
                '<section class="cr-upd"><h2>ما الذي تغيّر منذ إعداد الدورة؟</h2><p class="bk-hint">أُعدّت هذه الدورة قبل سنوات، وبقي أغلب محتواها صالحاً. راجعنا ما تغيّر منذ ذلك الوقت، وهذه أهم النقاط:</p><ul>'
                + "".join(f'<li>{esc(u["text"])}{f" <a href=\"{esc(u["source"])}\" rel=\"noopener\" target=\"_blank\">المصدر</a>" if u.get("source") else ""}</li>' for u in ups)
                + "</ul></section>")
-        info = (f'<dl class="bk-info"><div><dt>الإعداد</dt><dd>شركة جوجان لخدمات الأعمال، ضمن دوراتها التدريبية في المجال الإداري</dd></div>'
+        lk = c.get("links", [])
+        upd += ("" if not lk else '<section class="cr-links"><h2>أدوات ومقالات مرتبطة بالدورة</h2><ul>'
+                + "".join(f'<li><a href="{esc(x["url"])}">{esc(x["title"])}</a></li>' for x in lk) + "</ul></section>")
+        info = (f'<dl class="bk-info"><div><dt>الإعداد</dt><dd>{esc(c.get("by", "شركة جوجان لخدمات الأعمال، ضمن دوراتها التدريبية في المجال الإداري"))}</dd></div>'
                 f'<div><dt>المجال</dt><dd><a href="/courses/#c-{c["category"]}">{cname}</a></dd></div>'
                 f'<div><dt>عدد الصفحات</dt><dd>{c["pages"]} صفحة</dd></div><div><dt>مدة القراءة</dt><dd>نحو {c["minutes"]} دقيقة</dd></div>'
                 f'<div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>')

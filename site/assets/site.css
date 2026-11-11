@@ -534,3 +534,5 @@ main{flex:1 0 auto}
 .vid-tall{display:none;max-width:420px;margin-inline:auto}
 @media (max-width:640px){.vid-wide{display:none}.vid-tall{display:block}}
 .vid figcaption{font-size:.9rem;color:var(--muted,#666);margin-top:.5em}
+.cr-links{border-inline-start:5px solid #1c1b42;background:#f4f3fb;border-radius:10px;padding:14px 20px;margin:22px 0}
+.cr-links h2{font-size:1.15rem;margin:0 0 4px}.cr-links li{margin:6px 0}

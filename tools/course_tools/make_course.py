@@ -38,6 +38,8 @@ ICONS = {  # 24x24 stroke paths
  "press-interview-course": "M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M9 21h6",
  "classroom-management-course": "M3 5h18v11H3zM8 20l4-4 4 4M7 9h6M7 12h4",
  "study-skills-course": "M3 6c3-1.2 6-1.2 9 .9 3-2.1 6-2.1 9-.9v13c-3-1.2-6-1.2-9 .9-3-2.1-6-2.1-9-.9zM12 6.9v13",
+ "ai-pre-feasibility-study-course": "M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8zM5 16l.9 2.1L8 19l-2.1.9L5 22l-.9-2.1L2 19l2.1-.9zM18 15l.7 1.6 1.6.7-1.6.7L18 20l-.7-1.6-1.6-.7 1.6-.7z",
+ "feasibility-analysis-types-course": "M3 20h18M5 20V10M9.5 20V4M14 20v-7M18.5 20v-11M4 8l5-4 5 6 6-5",
  "dealing-with-teenagers-course": "M9 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 11a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM3 21c0-3.9 2.7-7 6-7s6 3.1 6 7M14 21c.2-2.9 1.4-5 3-5s3.5 2.1 4 5",
 }
 MARK = '<svg viewBox="0 0 64 64" width="54" height="54"><rect width="64" height="64" rx="14" fill="#fff" fill-opacity=".12"/><path d="M12 46 L22 26 L32 46 Z M32 46 L42 26 L52 46 Z" fill="none" stroke="#f2b632" stroke-width="3.5" stroke-linejoin="round"/><path d="M22 26 L32 12 L42 26" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg>'
