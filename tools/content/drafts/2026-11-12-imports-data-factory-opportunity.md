@@ -4,7 +4,7 @@ seo: هل ارتفاع الواردات فرصة لمصنع في السعودي�
 slug: imports-data-factory-opportunity
 topic: saudi-investment
 date: 2026-11-12 09:30
-description: ارتفاع الواردات لا يثبت وجود فرصة صناعية. إطار عملي لقراءة بيانات الاستيراد السعودية بالبند الجمركي والسلسلة الزمنية وسعر الوحدة والإنتاج المحلي، مع تطبيق على منتج حقيقي.
+description: ارتفاع الواردات لا يثبت وجود فرصة صناعية. إطار من 9 خطوات لقراءة بيانات الاستيراد السعودية بالبند والكمية وسعر الوحدة والإنتاج المحلي، مع تطبيق على منتج حقيقي.
 ---
 ارتفعت واردات المملكة من القوارير والعبوات البلاستيكية (البند 392330) من نحو 33.8 مليون دولار في 2021 إلى نحو 53.1 مليون دولار في 2024، أي بنحو 57%. قد يقرأ مستثمر هذا الرقم وحده فيستنتج أن السوق ينتظر مصنعًا جديدًا. لكن البيانات نفسها تقول إن المملكة **صدّرت** من البند ذاته ما قيمته 88.4 مليون دولار في 2024، أي أكثر من وارداتها، وبسعر للكيلوغرام يقارب نصف سعر الكيلوغرام المستورد. فالمشهد ليس «سوقًا غير مخدوم»، بل صناعة محلية قائمة، وواردات تتركز على الأرجح في شرائح أعلى قيمة لم يُعرف بعد ما هي.
 
@@ -218,6 +218,5 @@ description: ارتفاع الواردات لا يثبت وجود فرصة صن�
 - البنك الدولي، WITS — واردات المملكة من البند 392330: [2021](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2021/tradeflow/Imports/partner/ALL/product/392330) · [2022](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2022/tradeflow/Imports/partner/ALL/product/392330) · [2023](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Imports/partner/ALL/product/392330) · [2024](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2024/tradeflow/Imports/partner/ALL/product/392330)
 - البنك الدولي، WITS — صادرات المملكة من البند 392330: [2021](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2021/tradeflow/Exports/partner/ALL/product/392330) · [2022](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2022/tradeflow/Exports/partner/ALL/product/392330) · [2023](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Exports/partner/ALL/product/392330) · [2024](https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2024/tradeflow/Exports/partner/ALL/product/392330)
 - الهيئة السعودية للمواصفات والمقاييس والجودة — [خبر: تسجيل أكثر من مليون منتج في منصة سابر (2020)](https://saso.gov.sa/ar/mediacenter/news/Pages/saso_news_1127.aspx)
-- الهيئة السعودية للمواصفات والمقاييس والجودة — [خبر: تمديد صلاحية شهادات الإرسالية في سابر إلى 90 يومًا (سبتمبر 2026)](https://www.saso.gov.sa/ar/mediacenter/news/Pages/saber-shipment-certificates-validity-90-days.aspx)
 - رؤية السعودية 2030 — [برنامج صنع في السعودية](https://www.vision2030.gov.sa/en/projects/made-in-saudi/)
 - صندوق التنمية الصناعية السعودي — [الموقع الرسمي](https://www.sidf.gov.sa/)
