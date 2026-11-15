@@ -382,7 +382,7 @@ def build(feed, dist):
     about = f"""<header class="hub-head pa"><div class="wrap"><h1>عن الموسوعة ومنهجية التحرير</h1></div><div class="najdi" aria-hidden="true"></div></header>
 <section class="wrap narrow prose"><p>«{NAME}» مرجع تعليمي تحرره شركة جوجان لخدمات الأعمال في الرياض، ويخدم قسمين: الدراسات والاستشارات (<a href="{B.CONSULT}">googanconsult.com</a>) والترجمة المعتمدة (<a href="{B.TRANSL}">googantranslation.com</a>).</p>
 <h2>منهجية التحرير</h2><ul><li>كل رقم أو اشتراط نظامي يُنسب إلى مصدره الرسمي، ويُذكر تاريخ آخر مراجعة.</li><li>المحتوى تعليمي ولا يغني عن استشارة مهنية لحالتك.</li><li>نصحح الأخطاء عند اكتشافها ونحدّث تاريخ المراجعة.</li></ul>
-<h2>التصحيح والتواصل</h2><p>لملاحظة على أي مقال: info@googan.net</p></section>"""
+<h2>التصحيح والتواصل</h2><p>لملاحظة على أي مقال راسلنا عبر <a href="/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a>.</p></section>"""
     (dist / "about").mkdir(exist_ok=True)
     (dist / "about" / "index.html").write_text(page(f"عن الموسوعة | {SHORT}", "منهجية التحرير في موسوعة جوجان.", f"{SITE}/about/", about), encoding="utf-8")
     (dist / "404.html").write_text(page(f"الصفحة غير موجودة | {SHORT}", "الصفحة غير موجودة.", SITE + "/404", '<header class="hub-head pa"><div class="wrap"><h1>الصفحة غير موجودة</h1><p class="hub-intro">قد تكون الصفحة نُقلت. ابدأ من <a href="/topics/">فهرس المحاور</a>.</p></div></header>', noindex=True), encoding="utf-8")

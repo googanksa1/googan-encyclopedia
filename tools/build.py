@@ -429,7 +429,7 @@ def build(feed, dist):
     about = f"""<section class="wrap hub prose"><h1>عن الموسوعة ومنهجية التحرير</h1>
 <p>«{NAME}» مرجع تعليمي تحرره شركة جوجان لخدمات الأعمال في الرياض. تخدم الموسوعة قسمين: الدراسات والاستشارات (<a href="{CONSULT}">googanconsult.com</a>) والترجمة المعتمدة (<a href="{TRANSL}">googantranslation.com</a>).</p>
 <h2>منهجية التحرير</h2><ul><li>كل رقم أو اشتراط نظامي يُنسب إلى مصدره الرسمي، ويُذكر تاريخ آخر مراجعة.</li><li>المحتوى تعليمي ولا يغني عن استشارة مهنية لحالتك.</li><li>نصحح الأخطاء عند اكتشافها، ونحدّث تاريخ المراجعة.</li></ul>
-<h2>التصحيح والتواصل</h2><p>لملاحظة على أي مقال: info@googan.net</p></section>"""
+<h2>التصحيح والتواصل</h2><p>لملاحظة على أي مقال راسلنا عبر <a href="/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a>.</p></section>"""
     (dist / "about").mkdir(exist_ok=True)
     (dist / "about" / "index.html").write_text(page(f"عن الموسوعة | {SHORT}", "عن موسوعة جوجان ومنهجية التحرير والتصحيح.", f"{SITE}/about/", about), encoding="utf-8")
 

@@ -3,6 +3,10 @@
 // 2) Serves every kept Blogger URL (/YYYY/MM/slug.html, /p/slug.html) with 200 at its exact path.
 // 3) Handles Blogger legacy paths (/search, archives, feeds, ?m=1).
 // 4) Serves library.bloggoogan.com (books and translated studies) from the /_library/ build folder.
+// 5) Adds security headers to every response (both hostnames).
+// 6) Fills the public contact e-mail from the Cloudflare env var SITE_CONTACT_EMAIL into
+//    <a data-ce> links (the address is kept out of the repo). Without the variable the links
+//    fall back to the About page contact section.
 const REDIRECTS = /*REDIRECTS*/{};
 const LIBRARY = /*LIBRARY*/"";
 const LIBRARY_LIVE = /*LIBRARY_LIVE*/false;
@@ -11,8 +15,53 @@ const LIB_REDIRECTS = /*LIB_REDIRECTS*/{};
 const LIB_GONE = /*LIB_GONE*/[];
 const KEY = (p) => p.replace(/^\/+/, "").replace(/\.html$/, "").replace(/[^A-Za-z0-9_-]/g, "_");
 
+const SECURITY = {
+  "Strict-Transport-Security": "max-age=31536000",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "SAMEORIGIN",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+  "Cross-Origin-Opener-Policy": "same-origin",
+};
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: https:",
+  "media-src 'self'",
+  "connect-src 'self'",
+  "frame-src https://www.youtube.com https://www.youtube-nocookie.com",
+  "frame-ancestors 'self'",
+  "form-action 'self' https://www.google.com",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+const EMAIL_OK = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
 export default {
   async fetch(request, env) {
+    const res = await route(request, env);
+    return harden(res, env);
+  },
+};
+
+function harden(res, env) {
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(SECURITY)) out.headers.set(k, v);
+  if (!(out.headers.get("content-type") || "").includes("text/html")) return out;
+  out.headers.set("Content-Security-Policy", CSP);
+  const email = String((env && env.SITE_CONTACT_EMAIL) || "").trim();
+  if (!out.body || !EMAIL_OK.test(email)) return out;
+  return new HTMLRewriter()
+    .on("a[data-ce]", { element(e) { e.setAttribute("href", "mailto:" + email); e.removeAttribute("data-ce"); } })
+    .on("[data-ce-text]", { element(e) { e.setInnerContent(email); e.setAttribute("dir", "ltr"); e.removeAttribute("data-ce-text"); } })
+    .transform(out);
+}
+
+async function route(request, env) {
+  {
     const url = new URL(request.url);
     let path;
     try { path = decodeURIComponent(url.pathname); } catch (e) { path = url.pathname; }
@@ -61,8 +110,8 @@ export default {
       return new Response(res.body, { status: 200, headers: h });
     }
     return res;
-  },
-};
+  }
+}
 
 // library.bloggoogan.com: every path maps to /_library/<path>; shared /assets/ come from the site root.
 async function library(request, env, url, path) {

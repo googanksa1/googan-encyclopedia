@@ -44,7 +44,7 @@ def _build(dist, M):
     out.mkdir(parents=True)
     today = datetime.now().strftime("%Y-%m-%d")
     org = {"@type": "Organization", "@id": SITE + "/#org", "name": "شركة جوجان لخدمات الأعمال", "alternateName": "Googan Business Services Company",
-           "url": M.TRANSL, "logo": M.LOGO, "email": "info@googan.net", "sameAs": [M.CONSULT, M.TRANSL]}
+           "url": M.TRANSL, "logo": M.LOGO,"sameAs": [M.CONSULT, M.TRANSL]}
     home_c = (NAME, "/")
     credit_line = f'<p class="bk-credit">{icon("book")}ترجمة قسم الترجمة الأكاديمية في شركة جوجان لخدمات الأعمال. <a href="{M.SVC["t_academic"]}">googantranslation.com</a></p>'
 
@@ -156,7 +156,7 @@ def _build(dist, M):
 <p>«{NAME}» مكتبة مجانية تنشر فيها شركة جوجان لخدمات الأعمال في الرياض أعمالاً ترجمها قسم الترجمة فيها: كتباً كاملة نُشرت بموافقة الجهة صاحبة الحق، ودراسات علمية محكّمة.</p>
 <h2>الدراسات</h2><p>ننشر الترجمة الكاملة للدراسة فقط حين تسمح رخصتها الأصلية بذلك، وننشر لغيرها قراءة عربية في أهم ما جاء فيها. في كل صفحة العنوان الأصلي والمؤلفون والمجلة والسنة ورابط الدراسة.</p>
 <h2>الكتب</h2><p>تُقرأ الكتب على الموقع مباشرة، وفي كل كتاب اسم الجهة التي تُرجم لها ومؤلفوه الأصليون.</p>
-<h2>التواصل والتصحيح</h2><p>لملاحظة أو تصحيح راسلنا على <a href="mailto:info@googan.net">info@googan.net</a>. لخدمات الترجمة الأكاديمية والمعتمدة: <a href="{M.TRANSL}">googantranslation.com</a>.</p></div>"""
+<h2>التواصل والتصحيح</h2><p>لملاحظة أو تصحيح راسلنا عبر <a href="https://www.bloggoogan.com/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a>. لخدمات الترجمة الأكاديمية والمعتمدة: <a href="{M.TRANSL}">googantranslation.com</a>.</p></div>"""
     (out / "about").mkdir(exist_ok=True)
     (out / "about" / "index.html").write_text(page(f"عن المكتبة | {NAME}", "مكتبة جوجان: كتب ودراسات ترجمها قسم الترجمة في شركة جوجان لخدمات الأعمال.", "/about/", about), encoding="utf-8")
     nf = banner("الصفحة غير موجودة", "ربما نُقلت الصفحة. ابدأ من الصفحة الرئيسية للمكتبة.", pc="pb") + '<div class="wrap narrow nf"><p><a class="btn" href="/">الصفحة الرئيسية</a> <a class="btn ghost" href="/studies/">الدراسات المترجمة</a></p></div>'

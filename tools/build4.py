@@ -169,7 +169,7 @@ TEXT_SUBS = [
     (re.compile(r"(https?://)?(www\.)?googangroup(\.blogspot)?\.com/?\S*", re.I), ""),
     (re.compile(r"(https?://)?(www\.)?certified-translation-office\.co\S*", re.I), ""),
     (re.compile(r"(https?://)?(www\.)?googan\.co\b(?!m)/?", re.I), "جوجان"),
-    (re.compile(r"info@googan\.net\.com"), "info@googan.net"),
+    (re.compile(r"(\b[\w.+-]+@googan\.net)\.com\b"), r"\1"),  # fix ".net.com" typo in old posts
     (re.compile(r"أكثر من 15 عاماً"), "أكثر من 30 عاماً"),
     (re.compile(r"منذ 2009،\s*"), ""),
     (re.compile(r"خبرة تمتد منذ 2009"), "خبرة في الأردن والسعودية"),
@@ -209,8 +209,8 @@ def scrub(body, topic_svc):
             continue
         if "googanconsult.com/service-details/" in hu and "تقييم-المشروع" in hu:
             a["href"] = SVC["c_studies"]
-        if h.startswith("mailto:info@googan.net.com"):
-            a["href"] = "mailto:info@googan.net"
+        if h.startswith("mailto:") and h.endswith("@googan.net.com"):
+            a["href"] = h[:-4]
         if a.get("href", "").startswith("tel:") or "wa.me" in a.get("href", "") or "whatsapp" in a.get("href", ""):
             a.unwrap()
     for node in list(root.find_all(string=True)):
@@ -414,7 +414,7 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
   <div class="foot-about"><b>{NAME}</b><p>{FOOT_ABOUT}</p></div>
   <div><h2>اطلب خدمة</h2><a href="{SVC['c_studies']}">دراسات الجدوى</a><a href="{SVC['c_sidf']}">دراسة جدوى للصندوق الصناعي</a><a href="{SVC['t_certified']}">الترجمة المعتمدة</a><a href="{SVC['t_legal']}">الترجمة القانونية</a></div>
   <div><h2>{FOOT_H}</h2>{"".join(f'<a href="{u}">{n}</a>' for u, n in FOOT_LINKS)}</div>
-  <div><h2>تواصل</h2><a href="mailto:info@googan.net">{icon('mail')} info@googan.net</a><a href="{CONSULT}">googanconsult.com</a><a href="{TRANSL}">googantranslation.com</a></div>
+  <div><h2>تواصل</h2><a href="/about/#contact" data-ce>{icon('mail')} <span data-ce-text>البريد الإلكتروني</span></a><a href="{CONSULT}">googanconsult.com</a><a href="{TRANSL}">googantranslation.com</a></div>
  </div>
  <div class="wrap copy"><span>© {NOW.year} شركة جوجان لخدمات الأعمال، الرياض</span><span>الصور التوضيحية من Unsplash</span></div>
 </footer>
@@ -499,7 +499,7 @@ FAQ_HOME = [
     ("هل المحتوى بديل عن الاستشارة المهنية؟", "لا. المحتوى تعليمي يشرح المفاهيم والخطوات العامة. القرار الاستثماري أو المتطلبات النظامية لحالتك تحتاج مراجعة مختص وجهة الاختصاص الرسمية."),
     ("كيف أطلب دراسة جدوى أو ترجمة معتمدة؟", f'الموسوعة للتعليم فقط. لطلب دراسة جدوى تواصل مع <a href="{CONSULT}">قسم الدراسات والاستشارات</a>، ولطلب ترجمة معتمدة تواصل مع <a href="{TRANSL}">قسم الترجمة المعتمدة</a>.'),
     ("كيف ترتَّب الأدلة في القوائم؟", "ترتَّب الأدلة حسب شمولها، أي حجم المحتوى وعدد أقسامه، ويظهر لكل دليل وقت القراءة التقريبي وعدد أقسامه. لا نستخدم تقييمات أو مراجعات مستخدمين."),
-    ("وجدت خطأ في مقال، كيف أبلغ عنه؟", 'راسلنا على <a href="mailto:info@googan.net">info@googan.net</a> مع رابط المقال، ونصحح الخطأ ونحدّث تاريخ المراجعة.'),
+    ("وجدت خطأ في مقال، كيف أبلغ عنه؟", 'راسلنا عبر <a href="/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a> مع رابط المقال، ونصحح الخطأ ونحدّث تاريخ المراجعة.'),
 ]
 
 
@@ -733,7 +733,7 @@ def build(feed, dist):
 
 
     org = {"@type": "Organization", "@id": SITE + "/#org", "name": "شركة جوجان لخدمات الأعمال", "alternateName": "Googan Business Services Company",
-           "url": CONSULT, "logo": LOGO, "email": "info@googan.net", "sameAs": [CONSULT, TRANSL],
+           "url": CONSULT, "logo": LOGO, "sameAs": [CONSULT, TRANSL],
            "address": {"@type": "PostalAddress", "addressLocality": "الرياض", "addressCountry": "SA"},
            "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "telephone": TEL["A"], "areaServed": "SA", "availableLanguage": ["ar", "en"], "name": "قسم الدراسات والاستشارات"},
                             {"@type": "ContactPoint", "contactType": "customer service", "telephone": TEL["B"], "areaServed": "SA", "availableLanguage": ["ar", "en"], "name": "قسم الترجمة المعتمدة"}]}
@@ -891,11 +891,11 @@ def build(feed, dist):
 <h2 id="contact">التواصل</h2><ul>
 <li>قسم الدراسات والاستشارات: <a href="{CONSULT}">googanconsult.com</a>، واتساب <a href="{wa_link('A')}" target="_blank" rel="noopener"><bdi dir="ltr">+966 50 797 5011</bdi></a></li>
 <li>قسم الترجمة المعتمدة: <a href="{TRANSL}">googantranslation.com</a>، واتساب <a href="{wa_link('B')}" target="_blank" rel="noopener"><bdi dir="ltr">+966 54 378 4171</bdi></a></li>
-<li>البريد الإلكتروني: <a href="mailto:info@googan.net">info@googan.net</a></li>
+<li>البريد الإلكتروني: <a href="/about/#contact" data-ce><span data-ce-text>راسلنا</span></a></li>
 </ul>
 <h2 id="method">منهجية التحرير</h2><ul><li>تنشر الموسوعة أدلة تعليمية تشرح المفاهيم والخطوات العامة، ولا تنشر وعوداً بنتائج أو تقييمات.</li><li>عند ذكر اشتراط نظامي أو رقم رسمي نحيل إلى مصدره، ونذكر تاريخ آخر مراجعة على كل صفحة.</li><li>رُتّبت الأدلة في القوائم حسب شمول المحتوى (حجمه وعدد أقسامه)، وليس حسب تقييمات.</li><li>دُمجت المقالات المكررة، وأُحيلت المقالات القصيرة أو الخارجة عن تخصص الموسوعة إلى أقرب صفحة مناسبة، مع الحفاظ على روابطها القديمة.</li></ul>
 <h2 id="images">الصور</h2><p>الصور الرئيسية في المقالات صور توضيحية من منصة Unsplash، ولا تمثل مشاريع أو عملاء لجوجان.</p>
-<h2 id="fix">التصحيح والتواصل</h2><p>لملاحظة أو تصحيح على أي مقال راسلنا على <a href="mailto:info@googan.net">info@googan.net</a> مع رابط المقال.</p>
+<h2 id="fix">التصحيح والتواصل</h2><p>لملاحظة أو تصحيح على أي مقال راسلنا عبر <a href="/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a> مع رابط المقال.</p>
 <h2 id="disclaimer">إخلاء المسؤولية</h2><p>المحتوى تعليمي عام ولا يغني عن استشارة مهنية لحالتك أو عن الرجوع إلى الجهة الرسمية المختصة.</p></div>"""
     (dist / "about").mkdir(exist_ok=True)
     (dist / "about" / "index.html").write_text(page(f"عن الموسوعة ومنهجية التحرير | {SHORT}", "من يحرر موسوعة جوجان، وكيف نختار المحتوى ونراجعه ونصححه، ومصدر الصور.", "/about/", about, ld=[{"@context": "https://schema.org", "@graph": [org, {"@type": "AboutPage", "name": "عن الموسوعة", "url": SITE + "/about/"}]}]), encoding="utf-8")
@@ -926,7 +926,7 @@ def build(feed, dist):
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])
     (dist / "feeds" / "posts").mkdir(parents=True, exist_ok=True)
     (dist / "feeds" / "posts" / "default").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{keep[0]["updated"]}</updated>{fi}</feed>', encoding="utf-8")
-    (dist / "_headers").write_text("/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n", encoding="utf-8")
+    (dist / "_headers").write_text("/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n", encoding="utf-8")
     import library
     lib = library.build_library(dist, sys.modules[__name__])
     lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
