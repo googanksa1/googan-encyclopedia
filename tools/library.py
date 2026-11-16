@@ -15,10 +15,10 @@ SITE = "https://library.bloggoogan.com"
 NAME = "مكتبة جوجان"
 SHELL = dict(
     SITE=SITE, NAME=NAME, SHORT=NAME, TAGLINE="كتب ودراسات مترجمة للقراءة المجانية",
-    STRIP="كتب ودراسات علمية ترجمها قسم الترجمة في شركة جوجان لخدمات الأعمال، تُقرأ مجاناً",
+    STRIP="كتب ودراسات علمية من إصدارات شركة جوجان لخدمات الأعمال وترجماتها، تُقرأ مجاناً",
     NAV=[("/", "الرئيسية"), ("/books/", "الكتب"), ("/studies/", "الدراسات المترجمة"), ("/about/", "عن المكتبة")],
     SEARCH_HOST="library.bloggoogan.com", SEARCH_PH="ابحث في الكتب والدراسات…", SEARCH_LABEL="المكتبة", FEED="/feed.xml",
-    FOOT_ABOUT="مكتبة مجانية تنشر فيها شركة جوجان لخدمات الأعمال في الرياض كتباً ودراسات علمية ترجمها قسم الترجمة، مع ذكر المصدر الأصلي لكل عمل.",
+    FOOT_ABOUT="مكتبة مجانية تنشر فيها شركة جوجان لخدمات الأعمال في الرياض كتباً ودراسات علمية من إصداراتها وترجماتها، مع ذكر المصدر الأصلي لكل عمل مترجم.",
     FOOT_H="المكتبة", FOOT_LINKS=[("/books/", "الكتب"), ("/studies/", "الدراسات المترجمة"), ("/about/", "عن المكتبة")],
 )
 
@@ -127,7 +127,7 @@ def _build(dist, M):
 </div></section>""" if star else "")
     home = f"""<section class="hero"><div class="wrap hero-grid">
 <div class="hero-copy"><h1>كتب ودراسات علمية مترجمة إلى العربية، تُقرأ مجاناً</h1>
-<p class="sub">ترجمها قسم الترجمة في شركة جوجان لخدمات الأعمال، ونُشرت بموافقة أصحابها أو وفق رخصها، مع ذكر المصدر الأصلي لكل عمل.</p>
+<p class="sub">من إصدارات شركة جوجان لخدمات الأعمال وما ترجمه قسم الترجمة فيها، ونُشرت بموافقة أصحابها أو وفق رخصها، مع ذكر المصدر الأصلي لكل عمل مترجم.</p>
 <form class="search big" action="https://www.google.com/search" method="get" role="search"><input type="hidden" name="as_sitesearch" value="library.bloggoogan.com"><label class="sr" for="q-hero">ابحث في المكتبة</label><input id="q-hero" type="search" name="q" placeholder="مثال: التوحد، الصم، الانتكاسة، زيت الزيتون" autocomplete="off"><button type="submit" aria-label="ابحث">{icon('search')}<span>ابحث</span></button></form>
 <ul class="facts"><li><b>{len(books.BOOKS)}</b><span>كتاباً كاملاً</span></li><li><b>{len(studies)}</b><span>دراسة مترجمة</span></li><li><b>{len(fields_live)}</b><span>مجالات علمية</span></li></ul></div>
 <figure class="hero-books">{''.join(f'<a href="/books/{b["slug"]}/" tabindex="-1" aria-hidden="true"><img src="/books/{b["slug"]}/pages/001.webp" alt="" width="300" height="425" fetchpriority="high"></a>' for b in fan)}</figure>
@@ -153,7 +153,7 @@ def _build(dist, M):
 
     # ---------------- about / 404
     about = banner("عن المكتبة", "ما الذي ننشره هنا، ولماذا.", crumbs([home_c, ("عن المكتبة", None)]), pc="pb") + f"""<div class="wrap narrow prose about">
-<p>«{NAME}» مكتبة مجانية تنشر فيها شركة جوجان لخدمات الأعمال في الرياض أعمالاً ترجمها قسم الترجمة فيها: كتباً كاملة نُشرت بموافقة الجهة صاحبة الحق، ودراسات علمية محكّمة.</p>
+<p>«{NAME}» مكتبة مجانية تنشر فيها شركة جوجان لخدمات الأعمال في الرياض إصداراتها المعرفية المجانية، وأعمالاً ترجمها قسم الترجمة فيها: كتباً كاملة نُشرت بموافقة الجهة صاحبة الحق، ودراسات علمية محكّمة.</p>
 <h2>الدراسات</h2><p>ننشر الترجمة الكاملة للدراسة فقط حين تسمح رخصتها الأصلية بذلك، وننشر لغيرها قراءة عربية في أهم ما جاء فيها. في كل صفحة العنوان الأصلي والمؤلفون والمجلة والسنة ورابط الدراسة.</p>
 <h2>الكتب</h2><p>تُقرأ الكتب على الموقع مباشرة، وفي كل كتاب اسم الجهة التي تُرجم لها ومؤلفوه الأصليون.</p>
 <h2>التواصل والتصحيح</h2><p>لملاحظة أو تصحيح راسلنا عبر <a href="https://www.bloggoogan.com/about/#contact" data-ce><span data-ce-text>البريد الإلكتروني</span></a>. لخدمات الترجمة الأكاديمية والمعتمدة: <a href="{M.TRANSL}">googantranslation.com</a>.</p></div>"""

@@ -1,9 +1,22 @@
-"""Read-only online books (no download). Generated into dist/books/ by build4.build()."""
+"""Online books (read-only by default; a book with "pdf": True also offers its PDF). Generated into dist/books/ by build4.build()."""
 import json, re, shutil
 from pathlib import Path
 
 HERE = Path(__file__).parent
 BOOKS = [{
+    "slug": "from-idea-to-successful-business", "file": "from-idea-to-successful-business.json",
+    "category": "business", "type": "googan", "own": True, "pdf": True,
+    "title": "من الفكرة إلى المشروع الناجح: الدليل العملي الشامل لتأسيس المشاريع وإعداد دراسات الجدوى وإدارة الاستثمار من الصفر إلى التشغيل",
+    "orig": "", "authors": "", "authors_ar": "شركة جوجان لخدمات الأعمال",
+    "prep": "المستشار الدكتور علي الياسين، والمستشار الدكتور محمد الطياش، والمستشار السيد محمود علوان",
+    "prep_people": ["Dr. Ali Al-Yaseen", "Dr. Mohammed Al-Tayyash", "Mahmoud Alwan"],
+    "edition": "الطبعة الأولى، الرياض 2026م",
+    "license": "رخصة المشاع الإبداعي: نسب المصنَّف 4.0 دولي (CC BY 4.0)", "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "desc": "إصدار معرفي مجاني من شركة جوجان لخدمات الأعمال في 100 صفحة: دليل عملي متدرج من تقييم الاستعداد واختبار الفكرة إلى دراسة السوق ونموذج الأعمال والجدوى الفنية والمالية والتمويل والمخاطر، مع دراسة حالة و15 نموذجًا قابلًا للتعبئة.",
+    "credit": "تأليف: شركة جوجان لخدمات الأعمال، إعداد فريق المستشارين في قسم الدراسات والاستشارات",
+    "credit_url": "https://googanconsult.com/", "credit_text": "googanconsult.com",
+    "preview": [0, 1], "page_labels": True, "cover_spread": False,
+}, {
     "slug": "staying-sober",
     "file": "staying-sober.json",
     "title": "البقاء متزناً: دليل الوقاية من الانتكاسة",
@@ -53,11 +66,13 @@ WITHDRAWN = ["advanced-curriculum-1", "advanced-curriculum-2", "advanced-curricu
 # Subject categories (shown as sections on /books/ and as their own pages /books/c/<key>/).
 # Add a new subject here, then give each book "category": "<key>" and a "type" from TYPES.
 CATEGORIES = {
+    "business": ("ريادة الأعمال ودراسات الجدوى", "إصدارات معرفية مجانية من جوجان في تأسيس المشاريع ودراسات الجدوى وإدارة الاستثمار، تُقرأ على الموقع وتُحمَّل مجانًا."),
     "health": ("الصحة والطب البديل", "كتب مترجمة في الصحة والطب البديل والتكميلي، تُنشر للاطلاع والمعرفة ولا تغني عن استشارة الطبيب."),
     "islam": ("التعريف بالإسلام", "كتب في التعريف بالإسلام بلغات مختلفة، منها كتب أهداها مترجموها إلى مكتبة جوجان."),
     "addiction": ("الإدمان والتعافي", "أدلة علاجية وكتيبات ومناهج تدريبية في علاج الإدمان والوقاية من الانتكاسة، للمعالجين والمرشدين والمتعافين وأسرهم."),
 }
 TYPES = {   # order = display order inside a category
+    "googan": "من إصدارات جوجان",
     "therapist": "أدلة للمعالجين والمرشدين",
     "client": "كتيبات للمتعافين والمشاركين",
     "training": "مناهج تدريبية",
@@ -159,7 +174,12 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         base = f"/books/{bk['slug']}/"
         read = base + "read/"
         shutil.copytree(imgs, root / bk["slug"] / "pages")
-        clink = f' <a href="{transl}">googantranslation.com</a>' if bk.get("credit_link", True) else ""
+        clink = (f' <a href="{bk.get("credit_url", transl)}">{bk.get("credit_text", "googantranslation.com")}</a>' if bk.get("credit_link", True) else "")
+        pdf_name = f"{bk['slug']}.pdf"
+        if bk.get("pdf"):
+            (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
+            shutil.copy(HERE / "content" / "books" / pdf_name, root / bk["slug"] / pdf_name)
+        dl_btn = (f' <a class="btn ghost" href="{base}{pdf_name}" download>{icon("book")}حمّل الكتاب مجانًا (PDF)</a>' if bk.get("pdf") else "")
         credit = f'<p class="bk-credit">{icon("book")}<span>{esc(bk["credit"])}.{clink}</span></p>'
         toc_cards = "".join(
             f'<li><a href="{read}#p={s["page"]}"><span class="bk-ch">{esc(s["title"])}</span>{"<b>" + esc(s["sub"]) + "</b>" if s.get("sub") else ""}{"<small>صفحة " + str(s.get("printed", s["page"] - 1)) + "</small>" if bk.get("page_labels", True) else ""}</a></li>'
@@ -173,10 +193,14 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         orig_row = f'<div><dt>العنوان الأصلي</dt><dd dir="{bk.get('orig_dir', 'ltr')}">{esc(bk["orig"])}</dd></div>' if bk.get("orig") else ""
         who = " ".join(x for x in (esc(bk.get("authors_ar", "")), f'<span dir="ltr">({esc(bk["authors"])})</span>' if bk.get("authors") else "") if x)
         who_row = f'<div><dt>{"المؤلفان" if bk.get("page_labels", True) else "التأليف"}</dt><dd>{who}</dd></div>' if who else ""
-        info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>{esc(bk.get("translator_line", "شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم"))}</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
+        if bk.get("own"):
+            lic = f'<a href="{bk["license_url"]}" rel="license">{esc(bk["license"])}</a>'
+            info = f"""<dl class="bk-info"><div><dt>التأليف</dt><dd>{esc(bk["authors_ar"])}</dd></div><div><dt>إعداد</dt><dd>{esc(bk["prep"])}</dd></div><div><dt>الطبعة</dt><dd>{esc(bk["edition"])}</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات، وتحميل مجاني بصيغة PDF</dd></div><div><dt>الترخيص</dt><dd>{lic}</dd></div></dl>"""
+        else:
+            info = f"""<dl class="bk-info">{orig_row}{who_row}<div><dt>الترجمة والتدقيق</dt><dd>{esc(bk.get("translator_line", "شركة جوجان لخدمات الأعمال، لجمعية المشعل الخيرية وقويم"))}</dd></div><div><dt>التصنيف</dt><dd><a href="/books/c/{bk['category']}/">{CATEGORIES[bk["category"]][0]}</a>، {TYPES[bk["type"]]}</dd></div><div><dt>عدد الصفحات</dt><dd>{npg} صفحة</dd></div><div><dt>الإتاحة</dt><dd>قراءة مجانية على الموقع بتقليب الصفحات</dd></div></dl>"""
         body = banner(esc(bk["title"]), esc(bk["desc"]), crumbs([(short, "/"), ("مكتبة الكتب", "/books/"), (CATEGORIES[bk["category"]][0], f"/books/c/{bk['category']}/"), (bk["title"], None)])) + f"""
 <div class="wrap bk-top"><a class="bk-cover" href="{read}#p=1"><img src="{base}pages/001.webp" alt="غلاف كتاب {esc(bk['title'])}" width="420" height="625"></a>
-<div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a></p>{credit}</div></div>
+<div class="bk-top-copy">{info}<p class="bk-go"><a class="btn" href="{read}">{icon('book')}اقرأ الكتاب</a>{dl_btn}</p>{credit}</div></div>
 <div class="wrap bk-contents"><h2>فهرس الكتاب</h2><p class="bk-hint">اختر فصلاً ليُفتح الكتاب على صفحته مباشرة.</p><ol class="bk-chs">{toc_cards}</ol></div>
 {pre_html}"""
         (root / bk["slug"]).mkdir(parents=True, exist_ok=True)
@@ -186,6 +210,12 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
                "translationOfWork": {"@type": "Book", "name": bk["orig"], "inLanguage": bk.get("orig_lang", "en")}, "url": page.__globals__["SITE"] + base,
                "image": page.__globals__["SITE"] + base + "pages/001.webp"}]
         ld[0].pop("workTranslation")
+        if bk.get("own"):
+            for k in ("translator", "translationOfWork"): ld[0].pop(k, None)
+            ld[0]["author"] = {"@type": "Organization", "name": bk["authors_ar"], "url": bk.get("credit_url")}
+            ld[0]["contributor"] = [{"@type": "Person", "name": n} for n in bk.get("prep_people", [])]
+            ld[0]["bookEdition"] = bk.get("edition"); ld[0]["license"] = bk.get("license_url"); ld[0]["isAccessibleForFree"] = True
+            if bk.get("pdf"): ld[0]["encoding"] = {"@type": "MediaObject", "encodingFormat": "application/pdf", "contentUrl": page.__globals__["SITE"] + base + pdf_name}
         (root / bk["slug"] / "index.html").write_text(page(f"{bk['title']} | {short}", bk["desc"], base, body, ld=ld, og_image=page.__globals__["SITE"] + base + "pages/001.webp"), encoding="utf-8")
         urls.append(base)
         opts = "".join(f'<option value="{s["page"]}">{esc(label(s))}</option>' for s in secs)
@@ -207,7 +237,7 @@ def build_books(dist, *, page, banner, crumbs, esc, icon, transl, short, ver):
         cards.append(f'<li class="bk-card"><a href="{base}"><img src="{base}pages/001.webp" alt="" width="120" height="179" loading="lazy"><span><strong>{esc(bk["title"])}</strong><span>{esc(bk["authors_ar"])}</span><span>{npg} صفحة</span></span></a></li>')
     counts = {b["slug"]: len(list((HERE / "content" / "books" / f"{b['slug']}-pages").glob("*.webp"))) - (2 if b.get("cover_spread", True) else 0) for b in BOOKS}
     chips = "".join(f'<a class="bk-chip" href="/books/c/{k}/">{v[0]} <span>{sum(1 for b in BOOKS if b["category"] == k)}</span></a>' for k, v in CATEGORIES.items() if any(b["category"] == k for b in BOOKS))
-    body = banner("مكتبة الكتب", f"{len(BOOKS)} كتاباً ترجمها قسم الترجمة في جوجان، تُقرأ كاملة ومجاناً على الموقع بتقليب الصفحات.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + \
+    body = banner("مكتبة الكتب", f"{len(BOOKS)} كتاباً من إصدارات جوجان وترجماتها، تُقرأ كاملة ومجاناً على الموقع بتقليب الصفحات.", crumbs([(short, "/"), ("مكتبة الكتب", None)])) + \
         f'<div class="wrap"><nav class="bk-chips" aria-label="تصنيفات الكتب">{chips}</nav>{category_sections(esc, counts=counts)}</div>'
     (root / "index.html").write_text(page(f"مكتبة الكتب | {short}", "كتب مترجمة تُقرأ مجاناً بتقليب الصفحات، مصنفة حسب الموضوع ونوع الكتاب.", "/books/", body), encoding="utf-8")
     for key, (name, intro) in CATEGORIES.items():

@@ -433,7 +433,7 @@ main{flex:1 0 auto}
 .bk-top{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;padding:36px 0 10px;align-items:start}
 .bk-cover img{width:100%;height:auto;border-radius:4px;box-shadow:0 2px 4px rgba(28,27,66,.15),0 14px 34px rgba(28,27,66,.22);display:block}
 .bk-top .bk-info{margin-top:0}
-.bk-go{margin:18px 0}.bk-go .btn{display:inline-flex;gap:8px;align-items:center;font-size:17px;padding:12px 26px}
+.bk-go{margin:18px 0;display:flex;flex-wrap:wrap;gap:10px}.bk-go .btn{display:inline-flex;gap:8px;align-items:center;font-size:17px;padding:12px 26px}
 .bk-contents{padding:26px 0 8px}
 .bk-contents h2,.bk-pre-h{font-size:26px;margin-bottom:4px}
 .bk-hint{color:var(--muted);margin-bottom:16px}
