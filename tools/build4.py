@@ -378,9 +378,9 @@ def page(title, desc, path, body, *, ld=None, og_image=None, og_type="website", 
 <meta property="og:site_name" content="{NAME}">
 {ogi}<meta name="theme-color" content="#1c1b42">
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/assets/fonts/ibm-plex-sans-arabic-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cairo-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://images.unsplash.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css?v={V}">
 <link rel="alternate" type="application/atom+xml" title="{NAME}" href="{FEED}">
 {lds}</head>
@@ -704,6 +704,7 @@ def build(feed, dist):
     (dist / "assets").mkdir(parents=True)
     for f in ("site.css", "site.js", "mark.svg"):
         shutil.copy(HERE / f, dist / "assets" / f)
+    shutil.copytree(HERE / "fonts", dist / "assets" / "fonts")
     if (CONTENT / "media").exists():
         shutil.copytree(CONTENT / "media", dist / "media")
     snap_file = CONTENT / "legacy.json"
@@ -926,7 +927,7 @@ def build(feed, dist):
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])
     (dist / "feeds" / "posts").mkdir(parents=True, exist_ok=True)
     (dist / "feeds" / "posts" / "default").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{keep[0]["updated"]}</updated>{fi}</feed>', encoding="utf-8")
-    (dist / "_headers").write_text("/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n", encoding="utf-8")
+    (dist / "_headers").write_text("/assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n", encoding="utf-8")
     import library
     lib = library.build_library(dist, sys.modules[__name__])
     lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
