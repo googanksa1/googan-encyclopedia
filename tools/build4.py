@@ -927,7 +927,7 @@ def build(feed, dist):
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])
     (dist / "feeds" / "posts").mkdir(parents=True, exist_ok=True)
     (dist / "feeds" / "posts" / "default").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{keep[0]["updated"]}</updated>{fi}</feed>', encoding="utf-8")
-    (dist / "_headers").write_text("/assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n", encoding="utf-8")
+    (dist / "_headers").write_text("/assets/*\n  Cache-Control: public, max-age=86400\n/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n", encoding="utf-8")
     import library
     lib = library.build_library(dist, sys.modules[__name__])
     lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
