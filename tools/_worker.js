@@ -13,6 +13,8 @@ const LIBRARY_LIVE = /*LIBRARY_LIVE*/false;
 const LIB_REDIRECTS = /*LIB_REDIRECTS*/{};
 // Books withdrawn at the owner's request: answer 410 Gone (and never from cache) so no stale copy is served.
 const LIB_GONE = /*LIB_GONE*/[];
+// Old Blogger posts with no replacement (owner decision 18 Nov 2026): 410 Gone.
+const GONE = new Set(/*GONE*/[]);
 const KEY = (p) => p.replace(/^\/+/, "").replace(/\.html$/, "").replace(/[^A-Za-z0-9_-]/g, "_");
 
 const SECURITY = {
@@ -81,7 +83,8 @@ async function route(request, env) {
       return go((REDIRECTS[path] || url.pathname) + (REDIRECTS[path] ? "" : rest));
     }
     // Old Blogger URLs that never had a replacement: 410 Gone so Google drops them faster than a 404.
-    if (/^\/feeds\/\d+\/comments\//.test(path) || /^\/2025\/05\/article\d+\.html$/.test(path) || path === "/projects" || path === "/projects/") {
+    const PAGED = ["updated-max", "updated-min", "max-results", "start", "by-date", "reverse-paginate"].some((k) => url.searchParams.has(k));
+    if (GONE.has(path) || ((path === "/search" || path.startsWith("/search/")) && PAGED) || /^\/feeds\/\d+\/comments\//.test(path) || /^\/2025\/05\/article\d+\.html$/.test(path) || path === "/projects" || path === "/projects/") {
       const nf = await env.ASSETS.fetch(new Request(new URL("/404.html", url.origin)));
       return new Response(request.method === "HEAD" ? null : nf.body, { status: 410, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex" } });
     }

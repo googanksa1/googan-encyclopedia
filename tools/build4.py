@@ -697,6 +697,59 @@ def load_new_posts(redirects, library=False):
     return out
 
 
+# Owner decision 18 Nov 2026 (Search Console review): thin legacy idea posts stay readable but leave the index.
+NOINDEX = {"/2025/06/blog-post.html", "/2025/06/blog-post_4.html", "/2025/06/blog-post_45.html", "/2025/06/blog-post_60.html",
+           "/2025/06/blog-post_64.html", "/2025/06/blog-post_78.html", "/2025/06/blog-post_83.html",
+           "/2025/06/context-httpsschema.html", "/2025/06/context-httpsschema_13.html"}
+# Owner decision 18 Nov 2026: one primary Riyadh certified-translation page; the others keep a distinct intent and link to each other.
+CLUSTERS = [("أدلة الترجمة المعتمدة في الرياض", [
+    ("/2026/08/certified-translation-office-riyadh.html", "مكتب ترجمة معتمد في الرياض: الخدمات والوثائق وطريقة الطلب"),
+    ("/2026/08/certified-translation-riyadh.html", "خطوات طلب ترجمة معتمدة في الرياض من تجهيز المستند حتى الاستلام"),
+    ("/2025/06/2025.html", "كيف تختار مكتب ترجمة معتمدة في الرياض؟ قائمة تحقق قبل الإرسال"),
+    ("/2026/08/legal-certified-translation-riyadh.html", "الترجمة القانونية المعتمدة لوزارة العدل والمحاكم في الرياض"),
+    ("/2026/08/certified-translation-embassies-riyadh.html", "ترجمة وثائق السفارات والتأشيرات في الرياض"),
+])]
+
+
+def apply_overrides(keep):
+    """content/overrides/*.md rewrite a kept legacy post in place (same URL). Front matter: path, title, seo, description, updated."""
+    import markdown
+    idx = {p["path"]: p for p in keep}
+    for f in sorted((CONTENT / "overrides").glob("*.md")) if (CONTENT / "overrides").exists() else []:
+        m = re.match(r"^---\s*\n(.*?)\n---\s*\n(.*)$", f.read_text(encoding="utf-8"), re.S)
+        meta = {}
+        for line in m.group(1).splitlines():
+            if ":" in line:
+                k, v = line.split(":", 1); meta[k.strip()] = v.strip().strip('"')
+        p = idx.get(meta["path"])
+        if not p:
+            print("override: no such post", meta["path"]); continue
+        topic = p["topic"]
+        html_body = scrub(markdown.markdown(m.group(2), extensions=["tables", "sane_lists"]), TOPICS[topic][2])
+        lead, html_body = G.lead_and_rest(html_body)
+        html_body, _ = B.toc_and_ids(html_body)
+        sp = BeautifulSoup(html_body, "lxml")
+        p["toc_items"] = [(h["id"], h.get_text(" ", strip=True)) for h in sp.find_all("h2") if h.get("id")]
+        p.update(title=meta["title"], lead=lead, desc=meta.get("description") or desc_of(lead, html_body),
+                 body=insert_mid_cta(html_body, cta(TOPICS[topic][2], "inline")))
+        if meta.get("seo"):
+            p["seo_title"] = meta["seo"]
+        if meta.get("updated"):
+            p["updated"] = meta["updated"]
+        p["mins"], p["words"] = G.reading_minutes(lead + html_body)
+
+
+def apply_clusters(keep):
+    idx = {p["path"]: p for p in keep}
+    for title, items in CLUSTERS:
+        for path, _ in items:
+            p = idx.get(path)
+            if not p:
+                continue
+            lis = "".join(f'<li><a href="{u}">{esc(a)}</a></li>' for u, a in items if u != path and u in idx)
+            p["body"] += f'<nav class="keybox" aria-label="{esc(title)}"><h2>{esc(title)}</h2><ul>{lis}</ul></nav>'
+
+
 def build(feed, dist):
     dist = Path(dist)
     if dist.exists():
@@ -730,6 +783,12 @@ def build(feed, dist):
         redirects = {k: redirects.get(v, v) for k, v in redirects.items()}
     new_posts = load_new_posts(redirects)
     keep = sorted(keep + new_posts, key=lambda x: x["published"], reverse=True)
+    apply_overrides(keep)
+    apply_clusters(keep)
+    # Owner decision 18 Nov 2026: legacy posts that only redirected to the homepage answer 410 Gone instead.
+    gone = sorted(k for k, v in redirects.items() if v == "/")
+    for k in gone:
+        redirects.pop(k)
     print("new posts published:", len(new_posts))
 
 
@@ -789,7 +848,7 @@ def build(feed, dist):
         out.parent.mkdir(parents=True, exist_ok=True)
         kw = "، ".join(dict.fromkeys([p.get("seo_title") or p["title"], t[0], "السعودية", "جوجان"]))
         wa_label = "استفسر عبر واتساب"
-        out.write_text(page(seo_title(p["title"], p.get("seo_title")), p["desc"], p["path"], body, ld=ld, og_image=purl(p["photo"], 1200, 630), og_type="article", cls="is-article",
+        out.write_text(page(seo_title(p["title"], p.get("seo_title")), p["desc"], p["path"], body, ld=ld, og_image=purl(p["photo"], 1200, 630), og_type="article", cls="is-article", noindex=p["path"] in NOINDEX,
                             keywords=kw, wa=(wa_link(t[1], p["title"]), wa_label)), encoding="utf-8")
 
     # ---------------- hubs
@@ -919,7 +978,7 @@ def build(feed, dist):
     urls = [("/", None), ("/topics/", None), ("/about/", None)] + [(f"/topics/{k}/", None) for k in live_topics]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u, _ in urls]
-    sm += [f"<url><loc>{SITE}{p['path']}</loc><lastmod>{p['updated'][:10]}</lastmod></url>" for p in keep]
+    sm += [f"<url><loc>{SITE}{p['path']}</loc><lastmod>{p['updated'][:10]}</lastmod></url>" for p in keep if p["path"] not in NOINDEX]
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in book_urls]
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in course_urls]
     (dist / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
@@ -932,6 +991,7 @@ def build(feed, dist):
     lib = library.build_library(dist, sys.modules[__name__])
     lib_redirects = lib["redirects"] if LIBRARY_LIVE else {}
     worker = (HERE / "_worker.js").read_text(encoding="utf-8").replace("/*REDIRECTS*/{}", json.dumps({**redirects, **lib_redirects}, ensure_ascii=False))
+    worker = worker.replace("/*GONE*/[]", json.dumps(gone, ensure_ascii=False))
     worker = worker.replace("/*LIB_REDIRECTS*/{}", json.dumps(lib["host_redirects"], ensure_ascii=False))
     import books as _books
     worker = worker.replace("/*LIB_GONE*/[]", json.dumps([f"/books/{s}/" for s in _books.WITHDRAWN]))
