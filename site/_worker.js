@@ -74,6 +74,17 @@ async function route(request, env) {
     if (url.hostname === "bloggoogan.com") return go("https://www.bloggoogan.com" + url.pathname + url.search);
     if (url.hostname.startsWith("library.")) return library(request, env, url, path);
     if (path.startsWith("/_library/") || path === "/_library") return notFound();
+    // Blogger mobile variant (?m=1 / ?m=0): one 301 straight to the final clean URL (no chain).
+    if (url.searchParams.has("m")) {
+      const q = new URLSearchParams(url.search); q.delete("m");
+      const rest = q.toString() ? "?" + q.toString() : "";
+      return go((REDIRECTS[path] || url.pathname) + (REDIRECTS[path] ? "" : rest));
+    }
+    // Old Blogger URLs that never had a replacement: 410 Gone so Google drops them faster than a 404.
+    if (/^\/feeds\/\d+\/comments\//.test(path) || /^\/2025\/05\/article\d+\.html$/.test(path) || path === "/projects" || path === "/projects/") {
+      const nf = await env.ASSETS.fetch(new Request(new URL("/404.html", url.origin)));
+      return new Response(request.method === "HEAD" ? null : nf.body, { status: 410, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex" } });
+    }
     if (REDIRECTS[path]) return go(REDIRECTS[path]);
     if (!path.endsWith(".html") && REDIRECTS[path + ".html"]) return go(REDIRECTS[path + ".html"]);
     if (LIBRARY_LIVE && (path === "/books" || path.startsWith("/books/"))) return go(LIBRARY + path + url.search);
