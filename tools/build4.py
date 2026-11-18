@@ -698,7 +698,7 @@ def load_new_posts(redirects, library=False):
 
 
 # Owner decision 18 Nov 2026 (Search Console review): thin legacy idea posts stay readable but leave the index.
-NOINDEX = {"/2025/06/blog-post.html", "/2025/06/blog-post_4.html", "/2025/06/blog-post_45.html", "/2025/06/blog-post_60.html",
+NOINDEX = {"/2025/06/blog-post.html", "/2025/06/blog-post_45.html", "/2025/06/blog-post_60.html",
            "/2025/06/blog-post_64.html", "/2025/06/blog-post_78.html", "/2025/06/blog-post_83.html",
            "/2025/06/context-httpsschema.html", "/2025/06/context-httpsschema_13.html"}
 # Owner decision 18 Nov 2026: one primary Riyadh certified-translation page; the others keep a distinct intent and link to each other.

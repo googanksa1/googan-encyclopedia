@@ -1,5 +1,7 @@
 {
 "kept": [
+"/2026/11/solar-panel-module-assembly-factory.html",
+"/2026/11/lithium-ion-battery-recycling-factory.html",
 "/2026/11/certified-translation-sharurah.html",
 "/2026/11/certified-translation-turaif.html",
 "/2026/11/certified-translation-rafha.html",
@@ -68,10 +70,8 @@
 "/2025/06/blog-post_19.html",
 "/2025/06/blog-post_56.html",
 "/2025/06/blog-post_83.html",
-"/2025/06/blog-post_24.html",
 "/2025/06/blog-post_64.html",
 "/2025/06/blog-post_60.html",
-"/2025/06/blog-post_4.html",
 "/2025/06/blog-post_45.html",
 "/2025/06/blog-post_65.html",
 "/2025/06/blog-post_78.html",
@@ -211,6 +211,8 @@
 "/2025/01/blog-post_22.html": "/2026/08/feasibility-study-office-riyadh.html",
 "/2011/05/blog-post.html": "/2026/08/certified-translation-riyadh.html",
 "/2025/09/blog-post.html": "/2025/06/blog-post_16.html",
+"/2025/06/blog-post_4.html": "/2026/11/lithium-ion-battery-recycling-factory.html",
+"/2025/06/blog-post_24.html": "/2026/11/lithium-ion-battery-recycling-factory.html",
 "/2026/08/certified-translation-office-riyadh.html.html": "/2026/08/certified-translation-office-riyadh.html"
 },
 "extra_reasons": {
