@@ -3,7 +3,7 @@ title: مصنع شواحن السيارات الكهربائية: خط التج�
 seo: مصنع شواحن السيارات الكهربائية: الخط والمعدات والمواصفات
 slug: ev-charger-manufacturing-factory
 topic: industry
-date: 2026-11-19 10:00
+date: 2026-11-19 09:30
 photo: /media/industry/ev-charger-manufacturing-factory
 description: شرح فني لمصنع شواحن السيارات الكهربائية المنزلية والسريعة: محطات الخط والمعدات والمواد واختبارات نهاية الخط ومواصفات IEC وشهادة ساسو ومنطق الموقع.
 ---

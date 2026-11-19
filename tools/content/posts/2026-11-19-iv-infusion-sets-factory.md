@@ -3,7 +3,7 @@ title: مصنع مجموعات التسريب الوريدي وأكياس الم
 seo: مصنع مجموعات التسريب الوريدي: الخط والآلات والتعقيم
 slug: iv-infusion-sets-factory
 topic: industry
-date: 2026-11-19 11:00
+date: 2026-11-19 09:30
 photo: /media/industry/iv-infusion-sets-factory
 description: دليل فني لمصنع مجموعات التسريب الوريدي: المكونات ومواد PVC الخالية من DEHP، البثق والقولبة والتجميع الآلي، اختبارات ISO 8536-4، الغرف النظيفة، وEtO مقابل غاما.
 ---
