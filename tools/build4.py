@@ -983,6 +983,18 @@ def build(feed, dist):
     sm += [f"<url><loc>{SITE}{u}</loc><lastmod>{NOW.strftime('%Y-%m-%d')}</lastmod></url>" for u in course_urls]
     (dist / "sitemap.xml").write_text("\n".join(sm + ["</urlset>"]), encoding="utf-8")
     (dist / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /_posts/\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    # llms.txt (llmstxt.org proposal): a plain map of the encyclopedia for AI tools. Built only from site data.
+    ll = ["# موسوعة جوجان للأعمال والاستثمار والترجمة", "",
+          "> موسوعة عربية تعليمية تصدرها شركة جوجان لخدمات الأعمال (الرياض)، بركيزتين: دراسات الجدوى والاستثمار والصناعة، والترجمة المعتمدة وخدمات اللغة. المحتوى موجّه للسوق السعودية.", "",
+          "الخدمات التجارية على موقعين منفصلين: جوجان للاستشارات ودراسات الجدوى (https://googanconsult.com/) وجوجان للترجمة المعتمدة (https://googantranslation.com/). المكتبة الرقمية: https://library.bloggoogan.com/", ""]
+    live = [p for p in keep if p["path"] not in NOINDEX]
+    for pillar, head in (("A", "دراسات الجدوى والاستثمار والصناعة"), ("B", "الترجمة المعتمدة وخدمات اللغة")):
+        ll += [f"## {head}: أقسام الموسوعة", ""]
+        ll += [f"- [{TOPICS[k][0]}]({SITE}/topics/{k}/)" for k in TOPICS if TOPICS[k][1] == pillar and k not in LIBRARY_TOPICS]
+        ll += ["", f"## {head}: أحدث الأدلة", ""]
+        ll += [f"- [{p['title']}]({SITE}{p['path']}): {p['desc']}" for p in [q for q in live if TOPICS.get(q["topic"], ("", ""))[1] == pillar][:20]]
+        ll += [""]
+    (dist / "llms.txt").write_text("\n".join(ll), encoding="utf-8")
     fi = "".join(f'<entry><title>{esc(p["title"])}</title><link href="{SITE}{p["path"]}"/><id>{SITE}{p["path"]}</id><published>{p["published"]}</published><updated>{p["updated"]}</updated><summary>{esc(p["desc"])}</summary></entry>' for p in keep[:30])
     (dist / "feeds" / "posts").mkdir(parents=True, exist_ok=True)
     (dist / "feeds" / "posts" / "default").write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>{NAME}</title><link href="{SITE}/"/><id>{SITE}/</id><updated>{keep[0]["updated"]}</updated>{fi}</feed>', encoding="utf-8")
