@@ -4,7 +4,7 @@ seo: ترجمة معتمدة في جدة أونلاين: القنصليات وا
 slug: certified-translation-jeddah
 topic: certified-translation
 city: جدة
-date: 2026-11-23 16:00
+date: 2026-11-23 11:00
 photo: /media/translation/certified-translation-jeddah
 description: كيف تطلب ترجمة معتمدة في جدة أونلاين: خطوات الإرسال والاستلام بصيغة PDF مختومة أو ورق، ووثائق القنصليات والتأشيرات والميناء، ومكاتب ظهرت على خرائط جوجل.
 ---
