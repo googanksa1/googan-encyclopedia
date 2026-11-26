@@ -750,6 +750,75 @@ def apply_clusters(keep):
             p["body"] += f'<nav class="keybox" aria-label="{esc(title)}"><h2>{esc(title)}</h2><ul>{lis}</ul></nav>'
 
 
+# Contextual links to googanconsult.com guides (request from the consulting project, 26 Nov 2026).
+# Only indexed pages whose topic matches the guide; anchor = the guide's exact title; one plain <p> inserted mid-article.
+GC = "https://googanconsult.com/guide-details?guide="
+GUIDES = {
+    "feas": ("دليل-دراسة-الجدوى", "دليل دراسة الجدوى", "وتجد مراحل إعداد الدراسة وطريقة اتخاذ القرار بها في {a} على موقع جوجان للاستشارات."),
+    "market": ("دليل-دراسة-السوق", "دليل دراسة السوق", "أما قياس الطلب وتحليل العملاء والمنافسين فمشروح في {a}."),
+    "fin": ("الدليل-الشامل-لاشتراطات-دراسات-الجدوى-لجهات-التمويل-السعودية", "الدليل الشامل لاشتراطات دراسات الجدوى لجهات التمويل السعودية", "ولمعرفة ما تطلبه جهات التمويل من الدراسة راجع {a}."),
+    "sidf": ("متطلبات-دراسة-الجدوى-لدى-صندوق-التنمية-الصناعية-السعودي-نطاق-برنامج-تنافسية-ودليل-إعداد-الدراسة", "متطلبات دراسة الجدوى لدى صندوق التنمية الصناعية السعودي: نطاق برنامج تنافسية ودليل إعداد الدراسة", "وإذا كان المشروع سيتقدم بطلب تمويل صناعي، فاقرأ {a}."),
+    "re": ("دراسة-الجدوى-وترخيص-مشروعات-البيع-على-الخارطة-لدى-الهيئة-العامة-للعقار", "دراسة الجدوى وترخيص مشروعات البيع على الخارطة لدى الهيئة العامة للعقار", "وتفاصيل الترخيص وموقع دراسة الجدوى منه في {a}."),
+    "finst": ("دليل-الدراسة-المالية", "دليل الدراسة المالية", "ولمكونات الدراسة المالية كاملة راجع {a} على موقع جوجان للاستشارات."),
+}
+GUIDE_KW = {"feas": ["دراسة الجدوى|دراسة جدوى"], "market": ["تحليل السوق|دراسة السوق|حجم السوق", "السوق|الطلب|المنافس|العملاء"],
+            "fin": ["جهات التمويل|التمويل|تمويل", "البنك|القرض"],
+            "sidf": ["صندوق التنمية الصناعية|الصندوق الصناعي|SIDF", "التمويل|تمويل|قرض", "دراسة الجدوى|دراسة جدوى"],
+            "re": ["الخارطة|ترخيص|الهيئة"], "finst": ["صافي القيمة الحالية|فترة الاسترداد|نقطة التعادل|معدل العائد", "العائد|التدفق"]}
+GUIDE_LINKS = {
+    "/2026/11/choose-investment-city-saudi.html": ["feas", "market"], "/2025/05/blog-post_27.html": ["feas", "market"],
+    "/2025/03/0507975011.html": ["feas", "market"],
+    "/2025/05/blog-post_75.html": ["fin"],
+    **{p: ["sidf"] for p in ["/2025/09/blog-post_4.html", "/2026/11/imports-data-factory-opportunity.html",
+        "/2026/11/lithium-ion-battery-recycling-factory.html", "/2026/11/solar-panel-module-assembly-factory.html",
+        "/2026/11/ev-charger-manufacturing-factory.html", "/2026/11/iv-infusion-sets-factory.html",
+        "/2026/08/solar-glass-factory-feasibility-study-saudi-arabia.html",
+        "/2026/08/medical-cannula-catheters-needles-syringes-factory-saudi-arabia-2026.html",
+        "/2025/05/blog-post_42.html", "/2025/06/blog-post_19.html", "/2025/06/blog-post_48.html",
+        "/2025/06/blog-post_26.html", "/2025/06/blog-post_14.html"]},
+    "/2026/09/feasibility-study-off-plan-sales.html": ["re"],
+    **{p: ["finst"] for p in ["/2026/11/npv-vs-irr.html", "/2026/11/investment-appraisal-excel.html",
+        "/2026/11/project-roi-calculator-excel.html", "/2026/11/free-feasibility-financial-model.html",
+        ]},
+}
+
+
+def apply_guide_links(keep):
+    from urllib.parse import quote
+    idx = {p["path"]: p for p in keep}
+    for path, keys in GUIDE_LINKS.items():
+        p = idx.get(path)
+        if not p:
+            print("guide-link: missing", path); continue
+        sp = BeautifulSoup(p["body"], "html.parser")
+        top = [x for x in sp.find_all("p") if x.find_parent(["li", "table", "nav", "blockquote", "aside", "details", "figure"]) is None
+               and not (x.find_parent(class_=True) and x.find_parent(class_=True).name == "div")]
+        h2s = sp.find_all("h2")
+        first_h2 = h2s[0] if h2s else None
+        def after_h2(x):
+            return first_h2 is None or any(prev is first_h2 for prev in x.find_all_previous("h2"))
+        used = set()
+        for k in keys:
+            slug, title, tpl = GUIDES[k]
+            url = GC + quote(slug)
+            if url in p["body"] or (GC + slug) in p["body"]:
+                continue
+            cands = [x for x in top if after_h2(x) and id(x) not in used and len(x.get_text(strip=True)) > 60]
+            hit = None
+            for kw in GUIDE_KW[k]:
+                hit = next((x for x in cands if re.search(kw, x.get_text())), None)
+                if hit:
+                    break
+            if hit is None and cands:
+                hit = cands[-1]
+            if hit is None:
+                print("guide-link: no paragraph", path, k); continue
+            new = BeautifulSoup("<p>" + tpl.format(a=f'<a href="{url}">{esc(title)}</a>') + "</p>", "html.parser").p
+            hit.insert_after(new)
+            used.add(id(hit)); used.add(id(new))
+        p["body"] = str(sp)
+
+
 def build(feed, dist):
     dist = Path(dist)
     if dist.exists():
@@ -785,6 +854,7 @@ def build(feed, dist):
     keep = sorted(keep + new_posts, key=lambda x: x["published"], reverse=True)
     apply_overrides(keep)
     apply_clusters(keep)
+    apply_guide_links(keep)
     # Owner decision 18 Nov 2026: legacy posts that only redirected to the homepage answer 410 Gone instead.
     gone = sorted(k for k, v in redirects.items() if v == "/")
     for k in gone:
